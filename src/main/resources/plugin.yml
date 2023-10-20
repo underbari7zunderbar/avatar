@@ -6,3 +6,8 @@ load: STARTUP
 authors:
   - Author
 api-version: "$apiVersion"
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib:1.8.22
+  - org.jetbrains.kotlin:kotlin-reflect:1.8.22
+  - io.github.monun:tap-core:4.9.8
+  - io.github.monun:invfx-core:3.3.2

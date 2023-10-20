@@ -2,6 +2,7 @@ plugins {
   `java-library`
   id("io.papermc.paperweight.userdev") version "1.5.5"
   id("xyz.jpenilla.run-paper") version "2.2.0" // Adds runServer and runMojangMappedServer tasks for testing
+    kotlin("jvm") version "1.9.10"
 }
 
 group = "io.papermc.paperweight"
@@ -14,9 +15,12 @@ java {
 }
 
 dependencies {
-  paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
+  paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
+  implementation("io.github.monun:tap-api:4.9.8")
+  implementation("io.github.monun:invfx-api:3.3.2")
   // paperweight.foliaDevBundle("1.20.2-R0.1-SNAPSHOT")
   // paperweight.devBundle("com.example.paperfork", "1.20.2-R0.1-SNAPSHOT")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks {
@@ -56,4 +60,7 @@ tasks {
     outputJar.set(layout.buildDirectory.file("libs/PaperweightTestPlugin-${project.version}.jar"))
   }
    */
+}
+repositories {
+    mavenCentral()
 }
