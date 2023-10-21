@@ -1,15 +1,15 @@
-/*package io.papermc.paperweight.testplugin
+package site.revanilla.avatar
 
-import io.papermc.paperweight.testplugin.TestPlugin
-import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import java.io.File
 import java.util.*
 
-class AvatarManager(val plugin: TestPlugin, val folder: File) {
-    private val avatars = mutableMapOf<UUID, Avatar>()
+class AvatarManager(val plugin: AvatarPlugin, val folder: File) {
+  lateinit var avatarManager: AvatarManager
+    internal set
+  private val avatars = mutableMapOf<UUID, Avatar>()
 
-  fun load() {
+  /*fun load() {
       if (!folder.exists()) folder.mkdirs()
 
       folder.listFiles()?.forEach { file ->
@@ -26,11 +26,10 @@ class AvatarManager(val plugin: TestPlugin, val folder: File) {
               val offlinePlayer = Bukkit.getOfflinePlayer(u.uniqueid)
               if (offlinePlayer.isOnline) return@forEach
       }
-
-  }
+  }*/
 
   fun avatarBy(player: Player): Avatar {
-      val uniqueid = player.uniqueid
+      val uniqueid = player.uniqueId
       return avatars.computeIfAbsent(uniqueid) {
           Avatar(uniqueid, player.name).apply {
               avatarManager = this@AvatarManager
@@ -41,5 +40,4 @@ class AvatarManager(val plugin: TestPlugin, val folder: File) {
   fun avatarBy(uuid: UUID): Avatar? {
       return avatars[uuid]
   }
-
-}*/
+}

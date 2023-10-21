@@ -5,9 +5,9 @@ plugins {
     kotlin("jvm") version "1.9.10"
 }
 
-group = "io.papermc.paperweight"
-version = "1.0.0-SNAPSHOT"
-description = "Test plugin for paperweight-userdev"
+group = "site.revanilla.avatar"
+version = "Rolling"
+description = "Avatar plugin for RE:Vanilla"
 
 java {
   // Configure the java toolchain. This allows gradle to auto-provision JDK 17 on systems that only have JDK 8 installed for example.
@@ -18,6 +18,7 @@ dependencies {
   paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
   implementation("io.github.monun:tap-api:4.9.8")
   implementation("io.github.monun:invfx-api:3.3.2")
+  implementation("io.github.monun:kommand-api:3.1.7")
   // paperweight.foliaDevBundle("1.20.2-R0.1-SNAPSHOT")
   // paperweight.devBundle("com.example.paperfork", "1.20.2-R0.1-SNAPSHOT")
     implementation(kotlin("stdlib-jdk8"))

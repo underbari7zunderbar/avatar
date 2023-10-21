@@ -1,13 +1,13 @@
 name: $name
 version: $version
-main: io.papermc.paperweight.testplugin.TestPlugin
+main: site.revanilla.avatar.AvatarPlugin
 description: $description
-load: STARTUP
 authors:
-  - Author
+  - _I7Z_
 api-version: "$apiVersion"
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.22
   - org.jetbrains.kotlin:kotlin-reflect:1.8.22
   - io.github.monun:tap-core:4.9.8
   - io.github.monun:invfx-core:3.3.2
+  - io.github.monun:kommand-core:3.1.7
