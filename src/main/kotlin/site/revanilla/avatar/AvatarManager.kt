@@ -5,8 +5,7 @@ import java.io.File
 import java.util.*
 
 class AvatarManager(val plugin: AvatarPlugin, val folder: File) {
-  lateinit var avatarManager: AvatarManager
-    internal set
+
   private val avatars = mutableMapOf<UUID, Avatar>()
 
   /*fun load() {
@@ -37,7 +36,7 @@ class AvatarManager(val plugin: AvatarPlugin, val folder: File) {
       }
   }
 
-  fun avatarBy(uuid: UUID): Avatar? {
+fun avatarBy(uuid: UUID): Avatar? {
       return avatars[uuid]
   }
 }
