@@ -73,7 +73,7 @@ class AvatarPlugin : JavaPlugin(), Listener {
     val player = event.player
     fes.addPlayer(player)
       avatarManager.avatarBy(player).apply {
-        //copyTo(player.inventory)
+        copyTo(player.inventory)
       despawnAvatar()
     }
     despawnAvatar()
