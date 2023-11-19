@@ -8,7 +8,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.entity.Slime
 import org.bukkit.event.EventHandler
@@ -113,7 +113,7 @@ class AvatarPlugin : JavaPlugin(), Listener {
       isCustomNameVisible = false
     }
   }
-@EventHandler
+  @EventHandler
   fun onPlayerInteractEntity(event: PlayerInteractEntityEvent) {
     val clicked = event.rightClicked
     if (event.hand == EquipmentSlot.HAND && clicked is Slime) {
@@ -123,7 +123,8 @@ class AvatarPlugin : JavaPlugin(), Listener {
       val uuid = UUID(most, least)
       val avatar = avatarManager.avatarBy(uuid) ?: return
 
-      event.player.openInventory(avatar.inventory)
+      //event.player.openInventory(avatar.inventory)
+      Bukkit.getConsoleSender().sendMessage(uuid)
     }
   }
 }

@@ -8,7 +8,7 @@ import net.minecraft.world.entity.Pose
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Material
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftPlayer
+import org.bukkit.craftbukkit.v1_20_R2.entity.CraftPlayer
 import org.bukkit.entity.Player
 import org.bukkit.entity.Slime
 import org.bukkit.event.inventory.InventoryClickEvent
@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
 import java.util.*
 
-class Avatar(val folder: UUID, val uniqueid: String) : InventoryHolder {
+class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
 
   lateinit var avatarManager: AvatarManager
     //internal set

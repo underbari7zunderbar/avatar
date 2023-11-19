@@ -15,8 +15,8 @@ java {
 }
 
 dependencies {
-  paperweight.paperDevBundle("1.20.1-R0.1-SNAPSHOT")
-  implementation("io.github.monun:tap-api:4.9.8")
+  paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
+  implementation("io.github.monun:tap-api:4.9.9")
   implementation("io.github.monun:invfx-api:3.3.2")
   implementation("io.github.monun:kommand-api:3.1.7")
   // paperweight.foliaDevBundle("1.20.2-R0.1-SNAPSHOT")
@@ -64,4 +64,5 @@ tasks {
 }
 repositories {
     mavenCentral()
+    mavenLocal()
 }
