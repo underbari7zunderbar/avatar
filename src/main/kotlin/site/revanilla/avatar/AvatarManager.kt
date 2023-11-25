@@ -96,7 +96,7 @@ object AvatarManager {
         }
 
         private fun createAvatarInventory(player: Player) =
-            server.createInventory(null, 45, text("${player.name}의 시체", NamedTextColor.DARK_GRAY)).apply {
+            server.createInventory(null, 45, text(player.name, NamedTextColor.DARK_GRAY)).apply {
                 contents = Array(45) { if (it < 41) player.inventory.contents[it] else ItemStack(Material.AIR) }
             }
 
