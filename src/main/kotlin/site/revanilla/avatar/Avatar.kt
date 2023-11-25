@@ -1,4 +1,4 @@
-package site.revanilla.avatar
+/*package site.revanilla.avatar
 
 import com.destroystokyo.paper.profile.ProfileProperty
 import io.github.monun.tap.data.persistentData
@@ -69,7 +69,7 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
   }
 
   fun spawnAvatar(location: Location, name: String, properties: Set<ProfileProperty> = Bukkit.getOfflinePlayer(uniqueid).playerProfile.properties) {
-    this.avatarEntity = avatarManager.plugin.fes.spawnPlayer(location, name, properties).apply {
+    this.avatarEntity = avatarManager.plugin.fakeServer.spawnPlayer(location, name, properties).apply {
       updateMetadata {
         (this as CraftPlayer).handle.pose = Pose.SLEEPING
       }
@@ -86,12 +86,6 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
     }
   }
 
-  /*fun removeAvatar() {
-    avatarEntity?.run {
-      remove()
-      avatarEntity = null
-    }
-  }*/
   private fun updateAvatarArmor() {
     avatarEntity?.apply {
       updateEquipment {
@@ -105,7 +99,7 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
     }
   }
 
-  /*fun refreshSessions() {
+  fun refreshSessions() {
       session = System.currentTimeMillis()
       avatarEntity?.updateSession(session)
 
@@ -120,7 +114,7 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
       health = player.health
 
       changed = true
-  }*/
+  }
 
   fun onClick(event: InventoryClickEvent) {
     val slot = event.rawSlot
@@ -140,7 +134,7 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
     }
   }
 
-  /*fun onDrag(event: InventoryDragEvent) {
+  fun onDrag(event: InventoryDragEvent) {
     val cursor = event.oldCursor
     val slots = event.rawSlots
 
@@ -154,5 +148,5 @@ class Avatar(val folder: UUID, private val uniqueid: String) : InventoryHolder {
     } else if (slots.any { it < 7 }) {
       event.isCancelled = true
     }
-  }*/
-}
+  }
+}*/
