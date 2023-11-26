@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
-import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.createCorpseNPC
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
@@ -52,9 +51,7 @@ object AvatarEvent : Listener {
             updateAvatarInventory(offlinePlayer)
         }
     }
-    /*private fun updateAvatars() {
-        AvatarManager.updateAvatarInventory(player)
-    }*/
+
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         fakeServer.removePlayer(player)
@@ -79,13 +76,13 @@ object AvatarEvent : Listener {
     @EventHandler
     fun onInventoryDrag(event: InventoryDragEvent) {
         val player = event.whoClicked as? Player ?: return
-        AvatarManager.updateAvatarInventory(player)
+        updateAvatarInventory(player)
     }
 
     @EventHandler
     fun onPlayerInteract(event: PlayerInteractEvent) {
         val player = event.player
-        AvatarManager.updateAvatarInventory(player)
+        updateAvatarInventory(player)
     }
 
     /*@EventHandler
@@ -105,7 +102,7 @@ object AvatarEvent : Listener {
         val player = event.whoClicked
 
         if (clickedInventory != null && player is Player) {
-            AvatarManager.updateAvatarInventory(player)
+            updateAvatarInventory(player)
         }
     }
     @EventHandler
