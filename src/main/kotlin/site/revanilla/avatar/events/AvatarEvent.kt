@@ -40,7 +40,7 @@ object AvatarEvent : Listener {
             }
         }
 
-        avatarTask?.runTaskTimer(instance, 0L, 20L)
+        avatarTask?.runTaskTimer(instance, 0L, 1L)
     }
 
     fun cancelAvatarUpdater() {
