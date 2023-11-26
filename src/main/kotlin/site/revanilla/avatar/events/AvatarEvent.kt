@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.scheduler.BukkitRunnable
 import site.revanilla.avatar.AvatarManager
-import site.revanilla.avatar.AvatarManager.copyInventoryToAvatar
 import site.revanilla.avatar.AvatarManager.createCorpseNPC
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
@@ -25,7 +24,7 @@ import site.revanilla.avatar.AvatarPlugin.Companion.instance
 object AvatarEvent : Listener {
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
-        copyInventoryToAvatar(player)
+        //copyInventoryToAvatar(player)
         updateAllAvatarsInventories()
         fakeServer.addPlayer(player)
         despawnAvatar()
