@@ -85,16 +85,6 @@ object AvatarEvent : Listener {
         updateAvatarInventory(player)
     }
 
-    /*@EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val clickedInventory = event.clickedInventory
-        val player = event.whoClicked as? Player ?: return
-
-        if (clickedInventory != null) {
-            val clickedSlot = event.slot
-            player.sendMessage("Clicked slot: $clickedSlot")
-        }
-    }*/
 
     @EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
