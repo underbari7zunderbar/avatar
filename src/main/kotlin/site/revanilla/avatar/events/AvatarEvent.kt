@@ -26,6 +26,7 @@ object AvatarEvent : Listener {
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         copyInventoryToAvatar(player)
+        updateAllAvatarsInventories()
         fakeServer.addPlayer(player)
         despawnAvatar()
     }
