@@ -1,35 +1,29 @@
 package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryDragEvent
-import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.scheduler.BukkitRunnable
+import org.bukkit.event.player.PlayerToggleSneakEvent
+import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.createCorpseNPC
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.openInventory
-import site.revanilla.avatar.AvatarManager.updateAvatarInventory
-import site.revanilla.avatar.AvatarPlugin.Companion.instance
 
 
 object AvatarEvent : Listener {
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         //copyInventoryToAvatar(player)
-        updateAllAvatarsInventories()
+        //updateAvatarInventory(player)
         fakeServer.addPlayer(player)
         despawnAvatar()
     }
 
-    private var avatarTask: BukkitRunnable? = null
+    /*private var avatarTask: BukkitRunnable? = null
 
     fun startAvatarUpdater() {
         avatarTask = object : BukkitRunnable() {
@@ -38,7 +32,7 @@ object AvatarEvent : Listener {
             }
         }
 
-        avatarTask?.runTaskTimer(instance, 0L, 1L)
+        avatarTask?.runTaskTimer(instance, 0L, 20L)
     }
 
     fun cancelAvatarUpdater() {
@@ -48,9 +42,9 @@ object AvatarEvent : Listener {
     fun updateAllAvatarsInventories() {
         for (offlinePlayer in Bukkit.getOnlinePlayers()) {
             (offlinePlayer as Player)
-            updateAvatarInventory(offlinePlayer)
+            copyInventoryToAvatar(offlinePlayer)
         }
-    }
+    }*/
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
@@ -61,40 +55,31 @@ object AvatarEvent : Listener {
             while (block.type.isAir) { y -= 0.005 }
         })
 
-        /*AvatarManager.npc!!.updateEquipment {
+        AvatarManager.npc!!.updateEquipment {
             helmet = player.inventory.helmet
             chestplate = player.inventory.chestplate
             leggings = player.inventory.leggings
             boots = player.inventory.boots
             setItemInMainHand(player.inventory.itemInMainHand)
             setItemInOffHand(player.inventory.itemInOffHand)
-        }*/
+        }
 
-        player.inventory.clear()
+        //player.inventory.clear()
     }
 
-    @EventHandler
-    fun onInventoryDrag(event: InventoryDragEvent) {
-        val player = event.whoClicked as? Player ?: return
-        updateAvatarInventory(player)
-    }
-
-    @EventHandler
-    fun onPlayerInteract(event: PlayerInteractEvent) {
-        val player = event.player
-        updateAvatarInventory(player)
-    }
-
-
-    @EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val clickedInventory = event.clickedInventory
-        val player = event.whoClicked
-
-        if (clickedInventory != null && player is Player) {
-            updateAvatarInventory(player)
+    @EventHandler(ignoreCancelled = true)
+    fun PlayerToggleSneakEvent.onToggleSneak() {
+        if (isSneaking) {
+            fakePlayers.find {
+                it.bukkitEntity.location.distance(player.location) <= 1.5 ||
+                        it.bukkitEntity.location.clone().subtract(1.0, 0.0, 0.0).distance(player.location) <= 1.5 ||
+                        it.bukkitEntity.location.clone().subtract(2.0, 0.0, 0.0).distance(player.location) <= 1.5
+            }?.let {
+                openInventory(player, it)
+            }
         }
     }
+
     @EventHandler
     fun PlayerUseUnknownEntityEvent.onUseUnknownEntity() {
         fakePlayers.find { it.bukkitEntity.entityId == entityId }?.let {

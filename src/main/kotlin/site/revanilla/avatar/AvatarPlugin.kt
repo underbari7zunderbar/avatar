@@ -1,12 +1,13 @@
 package site.revanilla.avatar
 
+import org.bukkit.configuration.serialization.ConfigurationSerialization.registerClass
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
 import org.bukkit.plugin.java.JavaPlugin
+import site.revanilla.avatar.AvatarManager.corpses
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.events.AvatarEvent
-import site.revanilla.avatar.events.AvatarEvent.cancelAvatarUpdater
-import site.revanilla.avatar.events.AvatarEvent.startAvatarUpdater
+//import site.revanilla.avatar.events.AvatarEvent.cancelAvatarUpdater
 
 class AvatarPlugin : JavaPlugin(), Listener {
   companion object {
@@ -16,6 +17,9 @@ class AvatarPlugin : JavaPlugin(), Listener {
 
   override fun onEnable() {
     instance = this
+
+    registerClass(AvatarData::class.java)
+    corpses.addAll(config.getList("avatars", listOf<AvatarData>()) as List<AvatarData>)
     server.scheduler.runTaskTimer(this, fakeServer::update, 0L, 1L)
 
     server.pluginManager.registerEvents(this, this)
@@ -24,7 +28,7 @@ class AvatarPlugin : JavaPlugin(), Listener {
     AvatarManager.server.scheduler.runTaskTimer(AvatarManager.plugin, Runnable { fakeServer.update() }, 0L, 0L).also { AvatarManager.taskId = it.taskId }
 
     AvatarManager.corpses.forEach { AvatarManager.createAvatarFromData(it, true) }
-    startAvatarUpdater()
+    //startAvatarUpdater()
   }
 
   override fun onDisable() {
@@ -35,10 +39,10 @@ class AvatarPlugin : JavaPlugin(), Listener {
     AvatarManager.server.scheduler.cancelTask(AvatarManager.taskId)
     HandlerList.unregisterAll(AvatarEvent)
 
-    AvatarManager.corpses.clear()
+    corpses.clear()
 
-    AvatarManager.plugin.config.set("corpses", null)
-    AvatarManager.plugin.saveConfig()
-    cancelAvatarUpdater()
+    config.set("corpses", corpses.toList())
+    saveConfig()
+    //cancelAvatarUpdater()
   }
 }

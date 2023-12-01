@@ -11,7 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.PlayerInventory
 import java.util.*
 
 
@@ -33,8 +32,8 @@ object AvatarManager {
         }
     }
 
-    fun copyInventoryToAvatar(player: Player) {
-        npc?.let { avatar ->
+    /*fun copyInventoryToAvatar(player: Player) {
+        npc?.let { _ ->
             val corpseData = corpses.find { it.uniqueId == player.uniqueId }
             corpseData?.let {
                 copyTo(it, player.inventory)
@@ -43,7 +42,7 @@ object AvatarManager {
     }
 
     fun updateAvatarInventory(player: Player) {
-        npc?.let { avatar ->
+        npc?.let { _ ->
             val corpseData = corpses.find { it.uniqueId == player.uniqueId }
             corpseData?.let {
                 val avatarInventory = linkedInventory[it.uniqueId]
@@ -74,7 +73,7 @@ object AvatarManager {
         for (i in 1 until 36) {
             inv.setItem(i, corpseData.inventory.getItem(i))
         }
-    }
+    }*/
     fun createAvatarFromData(
         corpseData: AvatarData,
         isLoaded: Boolean = false,
@@ -96,8 +95,20 @@ object AvatarManager {
         }
 
         private fun createAvatarInventory(player: Player) =
-            server.createInventory(null, 45, text(player.name, NamedTextColor.DARK_GRAY)).apply {
-                contents = Array(45) { if (it < 41) player.inventory.contents[it] else ItemStack(Material.AIR) }
+            server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY)).apply {
+                setItem(1, ItemStack(Material.BARRIER))
+                setItem(2, ItemStack(Material.BARRIER))
+                setItem(3, player.inventory.helmet)
+                setItem(4, player.inventory.chestplate)
+                setItem(5, player.inventory.leggings)
+                setItem(6, player.inventory.boots)
+                setItem(7, ItemStack(Material.BARRIER))
+                setItem(8, player.inventory.itemInOffHand)
+                for (i in 9 until 18)
+                    setItem(i, ItemStack(Material.BARRIER))
+                contents = Array(54) {
+                    if (it < 36) player.inventory.storageContents[it] else ItemStack(Material.AIR)
+                }
             }
 
         fun createCorpseNPC(player: Player, deathLocation: Location) = createAvatarFromData(
