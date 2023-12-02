@@ -11,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.PlayerInventory
 import java.util.*
 
 
@@ -32,7 +33,7 @@ object AvatarManager {
         }
     }
 
-    /*fun copyInventoryToAvatar(player: Player) {
+    fun copyInventoryToAvatar(player: Player) {
         npc?.let { _ ->
             val corpseData = corpses.find { it.uniqueId == player.uniqueId }
             corpseData?.let {
@@ -73,7 +74,8 @@ object AvatarManager {
         for (i in 1 until 36) {
             inv.setItem(i, corpseData.inventory.getItem(i))
         }
-    }*/
+    }
+
     fun createAvatarFromData(
         corpseData: AvatarData,
         isLoaded: Boolean = false,

@@ -17,10 +17,7 @@ java {
 dependencies {
   paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
   implementation("io.github.monun:tap-api:4.9.9")
-  implementation("io.github.monun:invfx-api:3.3.2")
-  //implementation("io.github.monun:kommand:3.1.8")
-  // paperweight.foliaDevBundle("1.20.2-R0.1-SNAPSHOT")
-  // paperweight.devBundle("com.example.paperfork", "1.20.2-R0.1-SNAPSHOT")
+  implementation("io.github.monun:kommand:3.1.8")
     implementation(kotlin("stdlib-jdk8"))
 }
 

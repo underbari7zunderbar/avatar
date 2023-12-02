@@ -13,5 +13,4 @@ libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.22
   - org.jetbrains.kotlin:kotlin-reflect:1.8.22
   - io.github.monun:tap-core:4.9.9
-  - io.github.monun:invfx-core:3.3.2
-  - io.github.monun:kommand-core:3.1.7
+  - io.github.monun:kommand:3.1.8

@@ -1,17 +1,22 @@
 package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
+import org.bukkit.Bukkit
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
+import org.bukkit.scheduler.BukkitRunnable
 import site.revanilla.avatar.AvatarManager
+import site.revanilla.avatar.AvatarManager.copyInventoryToAvatar
 import site.revanilla.avatar.AvatarManager.createCorpseNPC
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.openInventory
+import site.revanilla.avatar.AvatarPlugin.Companion.instance
 
 
 object AvatarEvent : Listener {
@@ -23,7 +28,7 @@ object AvatarEvent : Listener {
         despawnAvatar()
     }
 
-    /*private var avatarTask: BukkitRunnable? = null
+    private var avatarTask: BukkitRunnable? = null
 
     fun startAvatarUpdater() {
         avatarTask = object : BukkitRunnable() {
@@ -44,7 +49,7 @@ object AvatarEvent : Listener {
             (offlinePlayer as Player)
             copyInventoryToAvatar(offlinePlayer)
         }
-    }*/
+    }
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
