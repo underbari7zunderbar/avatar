@@ -117,7 +117,7 @@ object AvatarManager {
         avatarInventory.setItem(6, inv.boots?.clone())
         avatarInventory.setItem(18, inv.itemInMainHand.clone())
         avatarInventory.setItem(8, inv.itemInOffHand.clone())
-        avatarInventory.storageContents = inv.storageContents
+        avatarInventory.storageContents = inv.storageContents.clone()
     }
     fun updateInv(player: Player) {
         val playerInventory = player.inventory
