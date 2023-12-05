@@ -2,7 +2,7 @@ plugins {
   `java-library`
   id("io.papermc.paperweight.userdev") version "1.5.5"
   id("xyz.jpenilla.run-paper") version "2.2.0" // Adds runServer and runMojangMappedServer tasks for testing
-    kotlin("jvm") version "1.9.10"
+  kotlin("jvm") version "1.9.10"
 }
 
 group = "site.revanilla.avatar"
@@ -17,8 +17,10 @@ java {
 dependencies {
   paperweight.paperDevBundle("1.20.2-R0.1-SNAPSHOT")
   implementation("io.github.monun:tap-api:4.9.9")
-  implementation("io.github.monun:kommand:3.1.8")
-    implementation(kotlin("stdlib-jdk8"))
+  implementation("com.github.jikoo.OpenInv:openinvapi:4.4.1")
+  // paperweight.foliaDevBundle("1.20.2-R0.1-SNAPSHOT")
+  // paperweight.devBundle("com.example.paperfork", "1.20.2-R0.1-SNAPSHOT")
+  implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks {
@@ -60,6 +62,7 @@ tasks {
    */
 }
 repositories {
-    mavenCentral()
-    mavenLocal()
+  mavenCentral()
+  mavenLocal()
+  maven(url = "https://jitpack.io")
 }

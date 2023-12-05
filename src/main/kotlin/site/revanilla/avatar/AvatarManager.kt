@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package site.revanilla.avatar
 
 import io.github.monun.tap.fake.FakeEntity
@@ -12,6 +14,7 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.PlayerInventory
+import org.bukkit.inventory.meta.SkullMeta
 import java.util.*
 
 
@@ -96,22 +99,43 @@ object AvatarManager {
             }
         }
 
-        private fun createAvatarInventory(player: Player) =
-            server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY)).apply {
-                setItem(1, ItemStack(Material.BARRIER))
-                setItem(2, ItemStack(Material.BARRIER))
-                setItem(3, player.inventory.helmet)
-                setItem(4, player.inventory.chestplate)
-                setItem(5, player.inventory.leggings)
-                setItem(6, player.inventory.boots)
-                setItem(7, ItemStack(Material.BARRIER))
-                setItem(8, player.inventory.itemInOffHand)
-                for (i in 9 until 18)
-                    setItem(i, ItemStack(Material.BARRIER))
-                contents = Array(54) {
-                    if (it < 36) player.inventory.storageContents[it] else ItemStack(Material.AIR)
-                }
+    private fun createAvatarInventory(player: Player): Inventory {
+        val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
+
+        val barrier = Material.BARRIER
+        val item = ItemStack(barrier)
+        val m = item.itemMeta
+        m.lore?.clear()
+        avatarInventory.setItem(1, ItemStack(barrier))
+        avatarInventory.setItem(2, ItemStack(barrier))
+        avatarInventory.setItem(3, player.inventory.helmet)
+        avatarInventory.setItem(4, player.inventory.chestplate)
+        avatarInventory.setItem(5, player.inventory.leggings)
+        avatarInventory.setItem(6, player.inventory.boots)
+        avatarInventory.setItem(7, ItemStack(barrier))
+        avatarInventory.setItem(8, player.inventory.itemInOffHand)
+
+        val skull = ItemStack(Material.PLAYER_HEAD, 1)
+        val meta = skull.itemMeta as SkullMeta
+        meta.setOwner(player.name)
+        meta.setDisplayName(player.name)
+        meta.lore?.removeAt(0)
+        skull.itemMeta = meta
+        avatarInventory.setItem(0, skull)
+
+        for (i in 9 until 18) {
+            avatarInventory.setItem(i, ItemStack(barrier))
+        }
+
+        val storageContents = player.inventory.storageContents
+        for (i in 18 until 54) {
+            if (i - 18 < storageContents.size && storageContents[i - 18] != null) {
+                avatarInventory.setItem(i, storageContents[i - 18])
             }
+        }
+
+        return avatarInventory
+    }
 
         fun createCorpseNPC(player: Player, deathLocation: Location) = createAvatarFromData(
             AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)

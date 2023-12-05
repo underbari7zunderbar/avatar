@@ -29,7 +29,7 @@ data class AvatarData(
             val uuid = UUID.fromString(args["uniqueId"] as String)
             val name = args["name"] as String
 
-            val inventoryContents = server.createInventory(null, 45, text(name)).apply {
+            val inventoryContents = server.createInventory(null, 54, text(name)).apply {
                 contents = (args["inventory"] as List<ItemStack>).toTypedArray()
             }
 
