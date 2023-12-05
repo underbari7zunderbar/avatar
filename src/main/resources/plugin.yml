@@ -7,8 +7,8 @@ authors:
 api-version: "$apiVersion"
 commands:
   avt:
-    description: Update avatar inventory for an offline player
-    usage: /updateavatar <offline_player_name>
+    description: summon offlineplayer avatar
+    usage: /avt <offline_player_name>
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.22
   - org.jetbrains.kotlin:kotlin-reflect:1.8.22
