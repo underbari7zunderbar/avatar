@@ -13,7 +13,6 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.PlayerInventory
 import org.bukkit.inventory.meta.SkullMeta
 import java.util.*
 
@@ -36,46 +35,16 @@ object AvatarManager {
         }
     }
 
-    fun copyInventoryToAvatar(player: Player) {
-        npc?.let { _ ->
-            val corpseData = corpses.find { it.uniqueId == player.uniqueId }
-            corpseData?.let {
-                copyTo(it, player.inventory)
+    fun updateAvatarArmor() {
+        npc?.apply {
+            updateEquipment {
+                setHelmet(avatarInventory.getItem(3)?.clone(), true)
+                setChestplate(avatarInventory.getItem(4)?.clone(), true)
+                setLeggings(avatarInventory.getItem(5)?.clone(), true)
+                setBoots(avatarInventory.getItem(6)?.clone(), true)
+                setItemInMainHand(avatarInventory.getItem(18)?.clone(), true)
+                setItemInOffHand(avatarInventory.getItem(8)?.clone(), true)
             }
-        }
-    }
-
-    fun updateAvatarInventory(player: Player) {
-        npc?.let { _ ->
-            val corpseData = corpses.find { it.uniqueId == player.uniqueId }
-            corpseData?.let {
-                val avatarInventory = linkedInventory[it.uniqueId]
-                val playerInventory = player.inventory
-
-                if (avatarInventory != null) {
-                    for (i in 0 until avatarInventory.size) {
-                        val avatarItem = avatarInventory.getItem(i)
-                        val playerItem = playerInventory.getItem(i)
-
-                        if (avatarItem != playerItem) {
-                            avatarInventory.setItem(i, playerItem)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private fun copyTo(corpseData: AvatarData, inv: PlayerInventory) {
-        inv.helmet = corpseData.inventory.getItem(39)
-        inv.chestplate = corpseData.inventory.getItem(38)
-        inv.leggings = corpseData.inventory.getItem(37)
-        inv.boots = corpseData.inventory.getItem(36)
-        inv.setItemInOffHand(corpseData.inventory.getItem(40))
-        inv.setItemInMainHand(corpseData.inventory.getItem(0))
-
-        for (i in 1 until 36) {
-            inv.setItem(i, corpseData.inventory.getItem(i))
         }
     }
 
@@ -98,14 +67,16 @@ object AvatarManager {
                 if (!isLoaded) corpses += AvatarData.from(npc!!, corpseData.uniqueId)
             }
         }
+    val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
 
     private fun createAvatarInventory(player: Player): Inventory {
-        val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
 
         val barrier = Material.BARRIER
         val item = ItemStack(barrier)
         val m = item.itemMeta
+        m.setDisplayName("")
         m.lore?.clear()
+        item.itemMeta = m
         avatarInventory.setItem(1, ItemStack(barrier))
         avatarInventory.setItem(2, ItemStack(barrier))
         avatarInventory.setItem(3, player.inventory.helmet)
@@ -135,6 +106,34 @@ object AvatarManager {
         }
 
         return avatarInventory
+    }
+
+    fun copyFrom(player: Player) {
+        val inv = player.inventory
+
+        avatarInventory.setItem(3, inv.helmet?.clone())
+        avatarInventory.setItem(4, inv.chestplate?.clone())
+        avatarInventory.setItem(5, inv.leggings?.clone())
+        avatarInventory.setItem(6, inv.boots?.clone())
+        avatarInventory.setItem(18, inv.itemInMainHand.clone())
+        avatarInventory.setItem(8, inv.itemInOffHand.clone())
+        avatarInventory.storageContents = inv.storageContents
+    }
+    fun updateInv(player: Player) {
+        val playerInventory = player.inventory
+
+        playerInventory.helmet = avatarInventory.getItem(3)?.clone()
+        playerInventory.chestplate = avatarInventory.getItem(4)
+        playerInventory.leggings = avatarInventory.getItem(5)?.clone()
+        playerInventory.boots = avatarInventory.getItem(6)?.clone()
+        playerInventory.setItemInMainHand(avatarInventory.getItem(18)?.clone())
+        playerInventory.setItemInOffHand(avatarInventory.getItem(8)?.clone())
+
+        val storageIndex = 18
+
+        val avatarStorageContents = avatarInventory.contents.copyOfRange(storageIndex, avatarInventory.size)
+        playerInventory.storageContents = avatarStorageContents
+
     }
 
         fun createCorpseNPC(player: Player, deathLocation: Location) = createAvatarFromData(

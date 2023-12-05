@@ -29,7 +29,6 @@ class AvatarPlugin : JavaPlugin() {
     AvatarManager.server.scheduler.runTaskTimer(AvatarManager.plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
     corpses.forEach { AvatarManager.createAvatarFromData(it, true) }
-    //startAvatarUpdater()
   }
 
   override fun onDisable() {
@@ -39,10 +38,7 @@ class AvatarPlugin : JavaPlugin() {
     server.scheduler.cancelTask(taskId)
     HandlerList.unregisterAll(AvatarEvent)
 
-    //corpses.clear()
-
     config.set("corpses", corpses.toList())
     AvatarManager.plugin.saveConfig()
-    //cancelAvatarUpdater()
   }
 }

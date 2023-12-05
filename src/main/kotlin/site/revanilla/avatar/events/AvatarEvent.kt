@@ -1,7 +1,7 @@
 package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
-import org.bukkit.Bukkit
+import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -9,47 +9,25 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
-import org.bukkit.scheduler.BukkitRunnable
 import site.revanilla.avatar.AvatarManager
-import site.revanilla.avatar.AvatarManager.copyInventoryToAvatar
+import site.revanilla.avatar.AvatarManager.avatarInventory
+import site.revanilla.avatar.AvatarManager.copyFrom
 import site.revanilla.avatar.AvatarManager.createCorpseNPC
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.openInventory
-import site.revanilla.avatar.AvatarPlugin.Companion.instance
+import site.revanilla.avatar.AvatarManager.updateAvatarArmor
+import site.revanilla.avatar.AvatarManager.updateInv
 
 
 object AvatarEvent : Listener {
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
-        //copyInventoryToAvatar(player)
-        //updateAvatarInventory(player)
         fakeServer.addPlayer(player)
+        updateInv(player)
+        copyFrom(player)
         despawnAvatar()
-    }
-
-    private var avatarTask: BukkitRunnable? = null
-
-    fun startAvatarUpdater() {
-        avatarTask = object : BukkitRunnable() {
-            override fun run() {
-                updateAllAvatarsInventories()
-            }
-        }
-
-        avatarTask?.runTaskTimer(instance, 0L, 20L)
-    }
-
-    fun cancelAvatarUpdater() {
-        avatarTask?.cancel()
-    }
-
-    fun updateAllAvatarsInventories() {
-        for (offlinePlayer in Bukkit.getOnlinePlayers()) {
-            (offlinePlayer as Player)
-            copyInventoryToAvatar(offlinePlayer)
-        }
     }
 
     @EventHandler
@@ -72,15 +50,57 @@ object AvatarEvent : Listener {
             setItemInOffHand(player.inventory.itemInOffHand)
         }
 
-        //player.inventory.clear()
+        player.inventory.clear()
+        updateAvatarArmor()
     }
 
-    @EventHandler
+    /*@EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
-        if (event.view.title().equals("Ѐ")) {
+        val clickedInventory = event.clickedInventory
+        val action = event.action
+        val clickedSlot = event.slot
+        val currentItem = event.currentItem
+
+        if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY || action == InventoryAction.PICKUP_ONE || action == InventoryAction.PICKUP_HALF || action == InventoryAction.PICKUP_ALL) {
+            if (clickedInventory != null && clickedSlot != InventoryView.OUTSIDE) {
+                // Check if an item is removed from the inventory
+                if (currentItem == null) {
+                    // Handle item removal here
+                    println("Item removed from inventory")
+                }
+            }
+        }
+    }*/
+
+
+
+    @EventHandler
+    fun onClick(event: InventoryClickEvent) {
+        val slot = event.rawSlot
+
+        if (slot == 0) {
+            event.isCancelled = true
+            return
+        }
+
+        val clickedInventory = event.clickedInventory
+        val player = event.whoClicked as? Player
+
+        if (clickedInventory == avatarInventory && player != null && !player.hasPermission("avt.avt")) {
             event.isCancelled = true
         }
+
+        if (slot < 54) {
+            val item = event.currentItem
+
+            if (item?.type == Material.BARRIER) {
+                event.isCancelled = true
+                return
+            }
+        }
+        updateAvatarArmor()
     }
+
     @EventHandler(ignoreCancelled = true)
     fun PlayerToggleSneakEvent.onToggleSneak() {
         if (isSneaking) {
