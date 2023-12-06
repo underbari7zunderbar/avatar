@@ -5,7 +5,6 @@ import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.corpses
 import site.revanilla.avatar.AvatarManager.fakeServer
-import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
 
 //import site.revanilla.avatar.events.AvatarEvent.cancelAvatarUpdater
@@ -26,7 +25,6 @@ class AvatarPlugin : JavaPlugin() {
 
     AvatarManager.server.onlinePlayers.forEach { fakeServer.addPlayer(it) }
     AvatarManager.server.pluginManager.registerEvents(AvatarEvent, AvatarManager.plugin)
-    AvatarManager.server.scheduler.runTaskTimer(AvatarManager.plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
     corpses.forEach { AvatarManager.createAvatarFromData(it, true) }
   }
@@ -35,7 +33,6 @@ class AvatarPlugin : JavaPlugin() {
     fakeServer.clear()
     fakeServer.entities.forEach { it.remove() }
     server.onlinePlayers.forEach { fakeServer.removePlayer(it) }
-    server.scheduler.cancelTask(taskId)
     HandlerList.unregisterAll(AvatarEvent)
 
     config.set("corpses", corpses.toList())
