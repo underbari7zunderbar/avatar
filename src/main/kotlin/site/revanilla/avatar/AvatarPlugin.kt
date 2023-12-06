@@ -7,8 +7,6 @@ import site.revanilla.avatar.AvatarManager.corpses
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.events.AvatarEvent
 
-//import site.revanilla.avatar.events.AvatarEvent.cancelAvatarUpdater
-
 @Suppress("UNCHECKED_CAST")
 class AvatarPlugin : JavaPlugin() {
   companion object {
@@ -35,7 +33,7 @@ class AvatarPlugin : JavaPlugin() {
     server.onlinePlayers.forEach { fakeServer.removePlayer(it) }
     HandlerList.unregisterAll(AvatarEvent)
 
-    config.set("corpses", corpses.toList())
+    config.set("avatars", corpses.toList())
     AvatarManager.plugin.saveConfig()
   }
 }
