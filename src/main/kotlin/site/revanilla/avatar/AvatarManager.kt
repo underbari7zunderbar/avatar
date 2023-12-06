@@ -129,9 +129,7 @@ object AvatarManager {
         playerInventory.setItemInMainHand(avatarInventory.getItem(18)?.clone())
         playerInventory.setItemInOffHand(avatarInventory.getItem(8)?.clone())
 
-        val storageIndex = 18
-
-        val avatarStorageContents = avatarInventory.contents.copyOfRange(storageIndex, avatarInventory.size)
+        val avatarStorageContents = avatarInventory.contents.copyOfRange(18, avatarInventory.size)
         playerInventory.storageContents = avatarStorageContents
 
     }
