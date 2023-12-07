@@ -72,8 +72,6 @@ object AvatarEvent : Listener {
         }
     }*/
 
-
-
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
         val slot = event.rawSlot
