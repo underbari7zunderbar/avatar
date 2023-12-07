@@ -22,12 +22,15 @@ import site.revanilla.avatar.AvatarManager.updateInv
 
 
 object AvatarEvent : Listener {
+
+    var avatarLoaded = false
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         updateInv(player)
         copyFrom(player)
         despawnAvatar()
+        avatarLoaded = true
     }
 
     @EventHandler
@@ -52,6 +55,7 @@ object AvatarEvent : Listener {
 
         player.inventory.clear()
         updateAvatarArmor()
+        avatarLoaded = true
     }
 
     /*@EventHandler
