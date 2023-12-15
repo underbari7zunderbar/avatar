@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
-import site.revanilla.avatar.AvatarManager.copyFrom
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
@@ -28,10 +27,11 @@ object AvatarEvent : Listener {
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         updateInv(player)
-        copyFrom(player)
+        //copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
         }
+        updateAvatarArmor()
         //despawnAvatar()
         //avatarLoaded = false
     }
@@ -61,26 +61,9 @@ object AvatarEvent : Listener {
         avatarLoaded = true
     }
 
-    /*@EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val clickedInventory = event.clickedInventory
-        val action = event.action
-        val clickedSlot = event.slot
-        val currentItem = event.currentItem
-
-        if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY || action == InventoryAction.PICKUP_ONE || action == InventoryAction.PICKUP_HALF || action == InventoryAction.PICKUP_ALL) {
-            if (clickedInventory != null && clickedSlot != InventoryView.OUTSIDE) {
-                // Check if an item is removed from the inventory
-                if (currentItem == null) {
-                    // Handle item removal here
-                    println("Item removed from inventory")
-                }
-            }
-        }
-    }*/
-
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
+        updateAvatarArmor()
         val slot = event.rawSlot
 
         if (slot == 0) {

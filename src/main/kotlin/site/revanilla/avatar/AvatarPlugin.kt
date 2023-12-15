@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.events.AvatarEvent
-import java.io.File
 
 @Suppress("UNCHECKED_CAST")
 class AvatarPlugin : JavaPlugin() {
@@ -21,10 +20,10 @@ class AvatarPlugin : JavaPlugin() {
     registerClass(AvatarData::class.java)
     avatars.addAll(config.getList("avatars", listOf<AvatarData>()) as List<AvatarData>)
 
-    val configFile = File(AvatarManager.plugin.dataFolder, "config.yml")
+    /*val configFile = File(AvatarManager.plugin.dataFolder, "config.yml")
     configFile.delete()
     saveDefaultConfig()
-    reloadConfig()
+    reloadConfig()*/
 
     server.scheduler.runTaskTimer(this, fakeServer::update, 0L, 1L)
 
@@ -32,6 +31,9 @@ class AvatarPlugin : JavaPlugin() {
     AvatarManager.server.pluginManager.registerEvents(AvatarEvent, AvatarManager.plugin)
 
     avatars.forEach { AvatarManager.createAvatarFromData(it, true) }
+    for (it in avatars) {
+      AvatarEvent.avatarLoaded = true
+    }
   }
 
   override fun onDisable() {
