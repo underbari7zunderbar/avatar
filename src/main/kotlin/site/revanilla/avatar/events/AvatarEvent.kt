@@ -71,6 +71,9 @@ object AvatarEvent : Listener {
             return
         }
 
+        for (i in 3 until 9) {
+            updateAvatarArmor()
+        }
         val clickedInventory = event.clickedInventory
         val player = event.whoClicked as? Player
 
