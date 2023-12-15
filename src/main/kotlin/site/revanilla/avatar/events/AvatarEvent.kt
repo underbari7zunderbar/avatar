@@ -12,7 +12,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
 import site.revanilla.avatar.AvatarManager.copyFrom
-import site.revanilla.avatar.AvatarManager.createCorpseNPC
+import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
@@ -39,7 +39,7 @@ object AvatarEvent : Listener {
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         fakeServer.removePlayer(player)
-        createCorpseNPC(player, player.location.clone().apply {
+        createAvatar(player, player.location.clone().apply {
             pitch = 0f
             yaw = 0f
             while (block.type.isAir) {

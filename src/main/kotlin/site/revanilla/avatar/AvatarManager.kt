@@ -24,7 +24,7 @@ object AvatarManager {
     val fakeServer = FakeEntityServer.create(plugin)
     val fakePlayers get() = fakeServer.entities.filter { it.bukkitEntity is Player } as List<FakeEntity<Player>>
     val linkedInventory = HashMap<UUID, Inventory>()
-    val corpses = arrayListOf<AvatarData>()
+    val avatars = arrayListOf<AvatarData>()
 
     var npc: FakeEntity<Player>? = null
     fun despawnAvatar() {
@@ -48,22 +48,22 @@ object AvatarManager {
     }
 
     fun createAvatarFromData(
-        corpseData: AvatarData,
+        avatarData: AvatarData,
         isLoaded: Boolean = false,
         skinProfile: MojangAPI.SkinProfile? = null
     ) {
-        val profile = skinProfile ?: MojangAPI.fetchSkinProfileAsync(corpseData.uniqueId).get()
+        val profile = skinProfile ?: MojangAPI.fetchSkinProfileAsync(avatarData.uniqueId).get()
 
         profile?.let {
-            npc = fakeServer.spawnPlayer(corpseData.location, corpseData.name, profile.profileProperties().toSet())
+            npc = fakeServer.spawnPlayer(avatarData.location, avatarData.name, profile.profileProperties().toSet())
 
             npc!!.updateMetadata {
                 pose = Pose.SLEEPING
-                linkedInventory[uniqueId] = corpseData.inventory
+                linkedInventory[uniqueId] = avatarData.inventory
 
             }
 
-                if (!isLoaded) corpses += AvatarData.from(npc!!, corpseData.uniqueId)
+                if (!isLoaded) avatars += AvatarData.from(npc!!, avatarData.uniqueId)
             }
         }
     val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
@@ -133,7 +133,7 @@ object AvatarManager {
 
     }
 
-        fun createCorpseNPC(player: Player, deathLocation: Location) = createAvatarFromData(
+        fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
             AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)
         )
 
