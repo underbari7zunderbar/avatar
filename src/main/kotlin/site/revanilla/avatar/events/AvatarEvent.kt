@@ -29,8 +29,11 @@ object AvatarEvent : Listener {
         fakeServer.addPlayer(player)
         updateInv(player)
         copyFrom(player)
-        despawnAvatar()
-        avatarLoaded = true
+        if (avatarLoaded) {
+            despawnAvatar()
+        }
+        //despawnAvatar()
+        //avatarLoaded = false
     }
 
     @EventHandler
