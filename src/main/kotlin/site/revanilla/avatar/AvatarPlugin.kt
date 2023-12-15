@@ -5,6 +5,8 @@ import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
 import site.revanilla.avatar.AvatarManager.fakeServer
+import site.revanilla.avatar.AvatarManager.plugin
+import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
 
 @Suppress("UNCHECKED_CAST")
@@ -25,10 +27,10 @@ class AvatarPlugin : JavaPlugin() {
     saveDefaultConfig()
     reloadConfig()*/
 
-    server.scheduler.runTaskTimer(this, fakeServer::update, 0L, 1L)
+    server.scheduler.runTaskTimer(plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
-    AvatarManager.server.onlinePlayers.forEach { fakeServer.addPlayer(it) }
-    AvatarManager.server.pluginManager.registerEvents(AvatarEvent, AvatarManager.plugin)
+    server.onlinePlayers.forEach { fakeServer.addPlayer(it) }
+    server.pluginManager.registerEvents(AvatarEvent, plugin)
 
     avatars.forEach { AvatarManager.createAvatarFromData(it, true) }
     for (it in avatars) {
@@ -37,12 +39,14 @@ class AvatarPlugin : JavaPlugin() {
   }
 
   override fun onDisable() {
+    taskId = 0
+    server.scheduler.cancelTask(taskId)
     fakeServer.clear()
     fakeServer.entities.forEach { it.remove() }
     server.onlinePlayers.forEach { fakeServer.removePlayer(it) }
     HandlerList.unregisterAll(AvatarEvent)
 
     config.set("avatars", avatars.toList())
-    AvatarManager.plugin.saveConfig()
+    plugin.saveConfig()
   }
 }

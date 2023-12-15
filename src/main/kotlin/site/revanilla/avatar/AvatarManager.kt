@@ -25,6 +25,7 @@ object AvatarManager {
     val fakePlayers get() = fakeServer.entities.filter { it.bukkitEntity is Player } as List<FakeEntity<Player>>
     val linkedInventory = HashMap<UUID, Inventory>()
     val avatars = arrayListOf<AvatarData>()
+    var taskId = 0
 
     var npc: FakeEntity<Player>? = null
     fun despawnAvatar() {

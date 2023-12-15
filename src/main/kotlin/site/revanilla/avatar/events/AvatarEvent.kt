@@ -32,6 +32,7 @@ object AvatarEvent : Listener {
             despawnAvatar()
         }
         updateAvatarArmor()
+        player.updateInventory()
         //despawnAvatar()
         //avatarLoaded = false
     }
