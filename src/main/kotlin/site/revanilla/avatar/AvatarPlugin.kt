@@ -8,6 +8,8 @@ import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.plugin
 import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
+import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
+import java.io.File
 
 @Suppress("UNCHECKED_CAST")
 class AvatarPlugin : JavaPlugin() {
@@ -22,10 +24,6 @@ class AvatarPlugin : JavaPlugin() {
     registerClass(AvatarData::class.java)
     avatars.addAll(config.getList("avatars", listOf<AvatarData>()) as List<AvatarData>)
 
-    /*val configFile = File(AvatarManager.plugin.dataFolder, "config.yml")
-    configFile.delete()
-    saveDefaultConfig()
-    reloadConfig()*/
 
     server.scheduler.runTaskTimer(plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
@@ -33,9 +31,15 @@ class AvatarPlugin : JavaPlugin() {
     server.pluginManager.registerEvents(AvatarEvent, plugin)
 
     avatars.forEach { AvatarManager.createAvatarFromData(it, true) }
+    avatars.forEach { avatarLoaded = true}
     for (it in avatars) {
-      AvatarEvent.avatarLoaded = true
+      avatarLoaded = true
     }
+    //val configFile = File(plugin.dataFolder, "config.yml")
+    val configFile: File = File("./plugin/Avatar/config.yml")
+    configFile.delete()
+    saveDefaultConfig()
+    //reloadConfig()
   }
 
   override fun onDisable() {

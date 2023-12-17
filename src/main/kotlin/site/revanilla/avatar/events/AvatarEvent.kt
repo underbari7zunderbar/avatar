@@ -23,10 +23,12 @@ import site.revanilla.avatar.AvatarManager.updateInv
 object AvatarEvent : Listener {
 
     var avatarLoaded = false
+    var changed: Boolean = false
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         updateInv(player)
+        println(avatarLoaded)
         //copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
@@ -64,6 +66,8 @@ object AvatarEvent : Listener {
 
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
+        changed = true
+
         updateAvatarArmor()
         val slot = event.rawSlot
 

@@ -67,6 +67,7 @@ object AvatarManager {
                 if (!isLoaded) avatars += AvatarData.from(npc!!, avatarData.uniqueId)
             }
         }
+
     val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
 
     private fun createAvatarInventory(player: Player): Inventory {
