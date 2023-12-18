@@ -4,6 +4,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization.registe
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
+import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.plugin
 import site.revanilla.avatar.AvatarManager.taskId
@@ -31,12 +32,11 @@ class AvatarPlugin : JavaPlugin() {
     server.pluginManager.registerEvents(AvatarEvent, plugin)
 
     avatars.forEach { AvatarManager.createAvatarFromData(it, true) }
-    avatars.forEach { avatarLoaded = true}
-    for (it in avatars) {
+    for (it in fakePlayers) {
       avatarLoaded = true
     }
     //val configFile = File(plugin.dataFolder, "config.yml")
-    val configFile: File = File("./plugin/Avatar/config.yml")
+    val configFile = File("./plugin/Avatar/config.yml")
     configFile.delete()
     saveDefaultConfig()
     //reloadConfig()

@@ -7,6 +7,7 @@ import io.github.monun.tap.fake.FakeEntityServer
 import io.github.monun.tap.mojangapi.MojangAPI
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Location
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -69,34 +70,33 @@ object AvatarManager {
         }
 
     val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
-
     private fun createAvatarInventory(player: Player): Inventory {
 
-        val barrier = Material.BARRIER
-        val item = ItemStack(barrier)
+        val item = ItemStack(Material.BARRIER)
         val m = item.itemMeta
-        m.setDisplayName(player.name + "의 가방")
+        m.displayName(text().content(player.name + "의 가방").decoration(TextDecoration.ITALIC, false).color(NamedTextColor.GRAY).build())
         m.lore?.clear()
+        m.setCustomModelData(1)
         item.itemMeta = m
-        avatarInventory.setItem(1, ItemStack(barrier))
-        avatarInventory.setItem(2, ItemStack(barrier))
+        avatarInventory.setItem(1, ItemStack(item))
+        avatarInventory.setItem(2, ItemStack(item))
         avatarInventory.setItem(3, player.inventory.helmet)
         avatarInventory.setItem(4, player.inventory.chestplate)
         avatarInventory.setItem(5, player.inventory.leggings)
         avatarInventory.setItem(6, player.inventory.boots)
-        avatarInventory.setItem(7, ItemStack(barrier))
+        avatarInventory.setItem(7, ItemStack(item))
         avatarInventory.setItem(8, player.inventory.itemInOffHand)
 
         val skull = ItemStack(Material.PLAYER_HEAD, 1)
         val meta = skull.itemMeta as SkullMeta
         meta.setOwner(player.name)
-        meta.setDisplayName(player.name)
+        meta.displayName(text().content(player.name).decoration(TextDecoration.ITALIC, false).color(NamedTextColor.WHITE).build())
         meta.lore?.removeAt(0)
         skull.itemMeta = meta
         avatarInventory.setItem(0, skull)
 
-        for (i in 9 until 18) {
-            avatarInventory.setItem(i, ItemStack(barrier))
+        for (i in 9 ..17) {
+            avatarInventory.setItem(i, ItemStack(item))
         }
 
         val storageContents = player.inventory.storageContents

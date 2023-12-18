@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
+import site.revanilla.avatar.AvatarManager.copyFrom
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
@@ -29,7 +30,7 @@ object AvatarEvent : Listener {
         fakeServer.addPlayer(player)
         updateInv(player)
         println(avatarLoaded)
-        //copyFrom(player)
+        copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
         }
