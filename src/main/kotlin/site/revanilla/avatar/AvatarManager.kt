@@ -68,14 +68,14 @@ object AvatarManager {
             }
         }
 
-    val avatarInventory = server.createInventory(null, 54, text("Ѐ", NamedTextColor.DARK_GRAY))
+    val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
 
     private fun createAvatarInventory(player: Player): Inventory {
 
         val barrier = Material.BARRIER
         val item = ItemStack(barrier)
         val m = item.itemMeta
-        m.setDisplayName("")
+        m.setDisplayName(player.name + "의 가방")
         m.lore?.clear()
         item.itemMeta = m
         avatarInventory.setItem(1, ItemStack(barrier))
