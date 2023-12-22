@@ -12,13 +12,13 @@ import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
 import site.revanilla.avatar.AvatarManager.copyFrom
+import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.openInventory
 import site.revanilla.avatar.AvatarManager.updateAvatarArmor
-import site.revanilla.avatar.AvatarManager.updateInv
 
 
 object AvatarEvent : Listener {
@@ -28,8 +28,7 @@ object AvatarEvent : Listener {
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
-        updateInv(player)
-        println(avatarLoaded)
+        copyTo(player)
         copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
@@ -57,7 +56,7 @@ object AvatarEvent : Listener {
             setItemInOffHand(player.inventory.itemInOffHand)
         }
 
-        player.inventory.clear()
+        //player.inventory.clear()
         updateAvatarArmor()
         avatarLoaded = true
     }

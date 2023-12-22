@@ -15,6 +15,7 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
 import java.util.*
 
 
@@ -28,7 +29,8 @@ object AvatarManager {
     val avatars = arrayListOf<AvatarData>()
     var taskId = 0
 
-    var npc: FakeEntity<Player>? = null
+    var npc: FakeEntity<Player>? = fakePlayers.firstOrNull()
+
     fun despawnAvatar() {
         npc?.run {
             remove()
@@ -107,13 +109,12 @@ object AvatarManager {
         skullMeta.lore = null
         skull.itemMeta = skullMeta
         avatarInventory.setItem(0, skull)
-
         for (i in 9..17) {
             avatarInventory.setItem(i, barrierItem)
         }
 
         val storageContents = player.inventory.storageContents
-        for (i in 18 ..54) {
+        for (i in 18 ..53) {
             if (i - 18 < storageContents.size && storageContents[i - 18] != null) {
                 avatarInventory.setItem(i, storageContents[i - 18])
             }
@@ -125,27 +126,43 @@ object AvatarManager {
     fun copyFrom(player: Player) {
         val inv = player.inventory
 
-        avatarInventory.setItem(3, inv.helmet?.clone())
-        avatarInventory.setItem(4, inv.chestplate?.clone())
-        avatarInventory.setItem(5, inv.leggings?.clone())
-        avatarInventory.setItem(6, inv.boots?.clone())
-        avatarInventory.setItem(18, inv.itemInMainHand.clone())
-        avatarInventory.setItem(8, inv.itemInOffHand.clone())
-        avatarInventory.storageContents = inv.storageContents.clone()
+        avatarInventory.setItem(3, inv.helmet)
+        avatarInventory.setItem(4, inv.chestplate)
+        avatarInventory.setItem(5, inv.leggings)
+        avatarInventory.setItem(6, inv.boots)
+        avatarInventory.setItem(18, inv.itemInMainHand)
+        avatarInventory.setItem(8, inv.itemInOffHand)
+        avatarInventory.storageContents = inv.storageContents
     }
-    fun updateInv(player: Player) {
+
+    fun copyTo(player: Player) {
         val playerInventory = player.inventory
 
-        playerInventory.helmet = avatarInventory.getItem(3)?.clone()
+        playerInventory.helmet = avatarInventory.getItem(3)
         playerInventory.chestplate = avatarInventory.getItem(4)
-        playerInventory.leggings = avatarInventory.getItem(5)?.clone()
-        playerInventory.boots = avatarInventory.getItem(6)?.clone()
-        playerInventory.setItemInMainHand(avatarInventory.getItem(18)?.clone())
-        playerInventory.setItemInOffHand(avatarInventory.getItem(8)?.clone())
+        playerInventory.leggings = avatarInventory.getItem(5)
+        playerInventory.boots = avatarInventory.getItem(6)
+        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
+        playerInventory.setItemInOffHand(avatarInventory.getItem(8))
 
-        val avatarStorageContents = avatarInventory.contents.copyOfRange(18, avatarInventory.size)
-        playerInventory.storageContents = avatarStorageContents
-
+        for (i in 27 .. 53) {
+            val avatarItem = avatarInventory.getItem(i)
+            if (avatarItem != null) {
+                val playerSlot = i - 8
+                if (playerSlot in 9 .. 35) {
+                    playerInventory.setItem(playerSlot, avatarItem)
+                }
+            }
+        }
+        for (i in 18 .. 26) {
+            val avatarItem = avatarInventory.getItem(i)
+            if (avatarItem != null) {
+                for (j in 36 .. 44) {
+                    playerInventory.setItem(j, avatarItem)
+                }
+            }
+        }
+        avatarLoaded = true
     }
 
         fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
