@@ -138,11 +138,10 @@ object AvatarManager {
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
         for (i in 27 .. 53) {
-            val avatarItem = avatarInventory.getItem(i)
-            if (avatarItem != null) {
-                val playerSlot = i - 19
-                if (playerSlot in 9 .. 35) {
-                    playerInventory.setItem(playerSlot, avatarItem)
+            for (j in 9..35) {
+                val avatarItem = avatarInventory.getItem(i)
+                if (avatarItem != null) {
+                    playerInventory.setItem(j, avatarItem)
                 }
             }
         }
