@@ -72,35 +72,48 @@ object AvatarManager {
     val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
     private fun createAvatarInventory(player: Player): Inventory {
 
-        val item = ItemStack(Material.BARRIER)
-        val m = item.itemMeta
-        m.displayName(text().content(player.name + "의 가방").decoration(TextDecoration.ITALIC, false).color(NamedTextColor.GRAY).build())
-        m.lore?.clear()
-        m.setCustomModelData(1)
-        item.itemMeta = m
-        avatarInventory.setItem(1, ItemStack(item))
-        avatarInventory.setItem(2, ItemStack(item))
+        val barrierItem = ItemStack(Material.BARRIER)
+        val barrierMeta = barrierItem.itemMeta
+        barrierMeta.displayName(
+            text()
+                .content("${player.name}의 가방")
+                .decoration(TextDecoration.ITALIC, false)
+                .color(NamedTextColor.GRAY)
+                .build()
+        )
+        barrierMeta.lore = null
+        barrierMeta.setCustomModelData(1)
+        barrierItem.itemMeta = barrierMeta
+
+        avatarInventory.setItem(1, barrierItem)
+        avatarInventory.setItem(2, barrierItem)
         avatarInventory.setItem(3, player.inventory.helmet)
         avatarInventory.setItem(4, player.inventory.chestplate)
         avatarInventory.setItem(5, player.inventory.leggings)
         avatarInventory.setItem(6, player.inventory.boots)
-        avatarInventory.setItem(7, ItemStack(item))
+        avatarInventory.setItem(7, barrierItem)
         avatarInventory.setItem(8, player.inventory.itemInOffHand)
 
         val skull = ItemStack(Material.PLAYER_HEAD, 1)
-        val meta = skull.itemMeta as SkullMeta
-        meta.setOwner(player.name)
-        meta.displayName(text().content(player.name).decoration(TextDecoration.ITALIC, false).color(NamedTextColor.WHITE).build())
-        meta.lore?.removeAt(0)
-        skull.itemMeta = meta
+        val skullMeta = skull.itemMeta as SkullMeta
+        skullMeta.owningPlayer = player
+        skullMeta.displayName(
+            text()
+                .content(player.name)
+                .decoration(TextDecoration.ITALIC, false)
+                .color(NamedTextColor.WHITE)
+                .build()
+        )
+        skullMeta.lore = null
+        skull.itemMeta = skullMeta
         avatarInventory.setItem(0, skull)
 
-        for (i in 9 ..17) {
-            avatarInventory.setItem(i, ItemStack(item))
+        for (i in 9..17) {
+            avatarInventory.setItem(i, barrierItem)
         }
 
         val storageContents = player.inventory.storageContents
-        for (i in 18 until 54) {
+        for (i in 18 ..54) {
             if (i - 18 < storageContents.size && storageContents[i - 18] != null) {
                 avatarInventory.setItem(i, storageContents[i - 18])
             }
