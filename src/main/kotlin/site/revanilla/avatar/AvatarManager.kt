@@ -137,18 +137,10 @@ object AvatarManager {
 
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
-
-        playerInventory.helmet = avatarInventory.getItem(3)
-        playerInventory.chestplate = avatarInventory.getItem(4)
-        playerInventory.leggings = avatarInventory.getItem(5)
-        playerInventory.boots = avatarInventory.getItem(6)
-        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
-        playerInventory.setItemInOffHand(avatarInventory.getItem(8))
-
         for (i in 27 .. 53) {
             val avatarItem = avatarInventory.getItem(i)
             if (avatarItem != null) {
-                val playerSlot = i - 8
+                val playerSlot = i - 19
                 if (playerSlot in 9 .. 35) {
                     playerInventory.setItem(playerSlot, avatarItem)
                 }
@@ -162,6 +154,12 @@ object AvatarManager {
                 }
             }
         }
+        playerInventory.helmet = avatarInventory.getItem(3)
+        playerInventory.chestplate = avatarInventory.getItem(4)
+        playerInventory.leggings = avatarInventory.getItem(5)
+        playerInventory.boots = avatarInventory.getItem(6)
+        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
+        playerInventory.setItemInOffHand(avatarInventory.getItem(8))
         avatarLoaded = true
     }
 
