@@ -10,7 +10,6 @@ import site.revanilla.avatar.AvatarManager.plugin
 import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
 import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
-import java.io.File
 
 @Suppress("UNCHECKED_CAST")
 class AvatarPlugin : JavaPlugin() {
@@ -35,11 +34,8 @@ class AvatarPlugin : JavaPlugin() {
     for (it in fakePlayers) {
       avatarLoaded = true
     }
-    //val configFile = File(plugin.dataFolder, "config.yml")
-    val configFile = File("./plugin/Avatar/config.yml")
-    configFile.delete()
-    saveDefaultConfig()
-    //reloadConfig()
+    config.set("avatars", null)
+    plugin.saveConfig()
   }
 
   override fun onDisable() {

@@ -36,8 +36,8 @@ object AvatarEvent : Listener {
         }
         updateAvatarArmor()
         player.updateInventory()
-        //despawnAvatar()
-        //avatarLoaded = false
+        despawnAvatar()
+        avatarLoaded = false
     }
 
     @EventHandler
@@ -46,9 +46,6 @@ object AvatarEvent : Listener {
         createAvatar(player, player.location.clone().apply {
             pitch = 0f
             yaw = 0f
-            while (block.type.isAir) {
-                y -= 0.005
-            }
         })
 
         AvatarManager.npc!!.updateEquipment {
