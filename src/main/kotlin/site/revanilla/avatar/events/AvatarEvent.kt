@@ -29,6 +29,7 @@ object AvatarEvent : Listener {
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         copyTo(player)
+        //TODO: 인벤 아이템 순서 이상하게 복사되는거 copyTo 때문 수정해라
         copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
