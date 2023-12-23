@@ -57,7 +57,7 @@ object AvatarEvent : Listener {
             setItemInOffHand(player.inventory.itemInOffHand)
         }
 
-        //player.inventory.clear()
+        player.inventory.clear()
         updateAvatarArmor()
         avatarLoaded = true
     }

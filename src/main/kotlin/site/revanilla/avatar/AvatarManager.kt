@@ -137,28 +137,43 @@ object AvatarManager {
 
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
-        for (i in 27 .. 53) {
-                val avatarItem = avatarInventory.getItem(i)
-                if (avatarItem != null) {
-                    for (j in 9..35) {
-                        playerInventory.setItem(j, avatarItem)
-                }
-            }
-        }
-        for (i in 18 .. 26) {
+        for (i in 53 downTo 27) {
             val avatarItem = avatarInventory.getItem(i)
             if (avatarItem != null) {
-                for (j in 36 .. 44) {
-                    playerInventory.setItem(j, avatarItem)
-                }
+                playerInventory.setItem(i - 18, avatarItem)
+            }
+        }
+        for (i in 18..26) {
+            val avatarItem = avatarInventory.getItem(i)
+            if (avatarItem != null) {
+                playerInventory.setItem(i + 18, avatarItem)
             }
         }
         playerInventory.helmet = avatarInventory.getItem(3)
         playerInventory.chestplate = avatarInventory.getItem(4)
         playerInventory.leggings = avatarInventory.getItem(5)
         playerInventory.boots = avatarInventory.getItem(6)
-        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
         playerInventory.setItemInOffHand(avatarInventory.getItem(8))
+        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
+        /*playerInventory.setItem(20, avatarInventory.getItem(20))
+        playerInventory.setItem(21, avatarInventory.getItem(21))
+        playerInventory.setItem(22, avatarInventory.getItem(22))
+        playerInventory.setItem(23, avatarInventory.getItem(23))
+        playerInventory.setItem(24, avatarInventory.getItem(24))
+        playerInventory.setItem(25, avatarInventory.getItem(25))
+        playerInventory.setItem(26, avatarInventory.getItem(26))
+        playerInventory.setItem(27, avatarInventory.getItem(27))
+        playerInventory.setItem(28, avatarInventory.getItem(28))
+        playerInventory.setItem(29, avatarInventory.getItem(29))
+        playerInventory.setItem(30, avatarInventory.getItem(30))
+        playerInventory.setItem(31, avatarInventory.getItem(31))
+        playerInventory.setItem(32, avatarInventory.getItem(32))
+        playerInventory.setItem(33, avatarInventory.getItem(33))
+        playerInventory.setItem(34, avatarInventory.getItem(34))
+        playerInventory.setItem(35, avatarInventory.getItem(35))
+        playerInventory.setItem(36, avatarInventory.getItem(36))
+        playerInventory.setItem(37, avatarInventory.getItem(37))
+        playerInventory.setItem(38, avatarInventory.getItem(38))*/
         avatarLoaded = true
     }
 

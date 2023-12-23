@@ -8,6 +8,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
+import site.revanilla.avatar.AvatarManager.linkedInventory
 import site.revanilla.avatar.AvatarManager.server
 import java.util.*
 
@@ -21,7 +22,7 @@ data class AvatarData(
     companion object {
         fun from(fakeEntity: FakeEntity<Player>, uuid: UUID): AvatarData {
             val location = fakeEntity.location
-            return AvatarData(location, uuid, AvatarManager.linkedInventory[fakeEntity.bukkitEntity.uniqueId]!!, fakeEntity.bukkitEntity.name)
+            return AvatarData(location, uuid, linkedInventory[fakeEntity.bukkitEntity.uniqueId]!!, fakeEntity.bukkitEntity.name)
         }
 
         @JvmStatic
