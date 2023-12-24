@@ -15,7 +15,7 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
-import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
+import site.revanilla.avatar.events.AvatarEvent
 import java.util.*
 
 
@@ -123,16 +123,17 @@ object AvatarManager {
         return avatarInventory
     }
 
-    fun copyFrom(player: Player) {
+    fun copyToP(player: Player) {
         val inv = player.inventory
-
-        avatarInventory.setItem(3, inv.helmet)
-        avatarInventory.setItem(4, inv.chestplate)
-        avatarInventory.setItem(5, inv.leggings)
-        avatarInventory.setItem(6, inv.boots)
-        avatarInventory.setItem(18, inv.itemInMainHand)
-        avatarInventory.setItem(8, inv.itemInOffHand)
-        avatarInventory.storageContents = inv.storageContents
+        inv.setItem(0, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(1, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(2, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(3, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(4, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(5, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(6, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(7, ItemStack(Material.WOODEN_SWORD))
+        inv.setItem(8, ItemStack(Material.WOODEN_SWORD))
     }
 
     fun copyTo(player: Player) {
@@ -143,39 +144,37 @@ object AvatarManager {
                 playerInventory.setItem(i - 18, avatarItem)
             }
         }
-        for (i in 18..26) {
-            val avatarItem = avatarInventory.getItem(i)
-            if (avatarItem != null) {
-                playerInventory.setItem(i + 18, avatarItem)
-            }
-        }
         playerInventory.helmet = avatarInventory.getItem(3)
         playerInventory.chestplate = avatarInventory.getItem(4)
         playerInventory.leggings = avatarInventory.getItem(5)
         playerInventory.boots = avatarInventory.getItem(6)
         playerInventory.setItemInOffHand(avatarInventory.getItem(8))
         playerInventory.setItemInMainHand(avatarInventory.getItem(18))
-        /*playerInventory.setItem(20, avatarInventory.getItem(20))
-        playerInventory.setItem(21, avatarInventory.getItem(21))
-        playerInventory.setItem(22, avatarInventory.getItem(22))
-        playerInventory.setItem(23, avatarInventory.getItem(23))
-        playerInventory.setItem(24, avatarInventory.getItem(24))
-        playerInventory.setItem(25, avatarInventory.getItem(25))
-        playerInventory.setItem(26, avatarInventory.getItem(26))
-        playerInventory.setItem(27, avatarInventory.getItem(27))
-        playerInventory.setItem(28, avatarInventory.getItem(28))
-        playerInventory.setItem(29, avatarInventory.getItem(29))
-        playerInventory.setItem(30, avatarInventory.getItem(30))
-        playerInventory.setItem(31, avatarInventory.getItem(31))
-        playerInventory.setItem(32, avatarInventory.getItem(32))
-        playerInventory.setItem(33, avatarInventory.getItem(33))
-        playerInventory.setItem(34, avatarInventory.getItem(34))
-        playerInventory.setItem(35, avatarInventory.getItem(35))
-        playerInventory.setItem(36, avatarInventory.getItem(36))
-        playerInventory.setItem(37, avatarInventory.getItem(37))
-        playerInventory.setItem(38, avatarInventory.getItem(38))*/
-        avatarLoaded = true
+        playerInventory.setItem(0, avatarInventory.getItem(18))
+        playerInventory.setItem(1, avatarInventory.getItem(19))
+        playerInventory.setItem(2, avatarInventory.getItem(20))
+        playerInventory.setItem(3, avatarInventory.getItem(21))
+        playerInventory.setItem(4, avatarInventory.getItem(22))
+        playerInventory.setItem(5, avatarInventory.getItem(23))
+        playerInventory.setItem(6, avatarInventory.getItem(24))
+        playerInventory.setItem(7, avatarInventory.getItem(25))
+        playerInventory.setItem(8, avatarInventory.getItem(26))
+        AvatarEvent.avatarLoaded = true
     }
+
+
+    fun copyFrom(player: Player) {
+        val inv = player.inventory
+
+        avatarInventory.setItem(3, inv.helmet)
+        avatarInventory.setItem(4, inv.chestplate)
+        avatarInventory.setItem(5, inv.leggings)
+        avatarInventory.setItem(6, inv.boots)
+        avatarInventory.setItem(18, inv.getItem(36))
+        avatarInventory.setItem(8, inv.itemInOffHand)
+        avatarInventory.storageContents = inv.storageContents
+    }
+
 
         fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
             AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)

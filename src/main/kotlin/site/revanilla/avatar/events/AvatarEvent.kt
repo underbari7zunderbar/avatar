@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
-import site.revanilla.avatar.AvatarManager.copyFrom
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
@@ -29,8 +28,6 @@ object AvatarEvent : Listener {
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         copyTo(player)
-        //TODO: 인벤 아이템 순서 이상하게 복사되는거 copyTo 때문 수정해라
-        copyFrom(player)
         if (avatarLoaded) {
             despawnAvatar()
         }
@@ -38,6 +35,21 @@ object AvatarEvent : Listener {
         player.updateInventory()
         despawnAvatar()
         avatarLoaded = false
+    }
+
+    @EventHandler
+    fun onInventoryClick(event: InventoryClickEvent) {
+        val whoClicked = event.whoClicked
+
+        if (whoClicked is Player) {
+            val player = whoClicked as Player
+            val slot = event.rawSlot
+
+            // 유효한 슬롯을 클릭했는지 확인
+            if (slot >= 0 && slot < player.inventory.size) {
+                player.sendMessage("클릭한 슬롯 번호: $slot")
+            }
+        }
     }
 
     @EventHandler

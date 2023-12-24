@@ -57,7 +57,7 @@ class AvatarPlugin : JavaPlugin(), Listener {
     server.onlinePlayers.forEach { copyTo(it) }
     HandlerList.unregisterAll(AvatarEvent)
 
-    config.set("avatars", avatars.toList())
+    //config.set("avatars", avatars.toList())
     plugin.saveConfig()
   }
 }
