@@ -11,6 +11,8 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
+import site.revanilla.avatar.AvatarManager.copyArmor
+import site.revanilla.avatar.AvatarManager.copyHotBar
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
@@ -28,6 +30,8 @@ object AvatarEvent : Listener {
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         copyTo(player)
+        copyArmor(player)
+        copyHotBar(player)
         if (avatarLoaded) {
             despawnAvatar()
         }
@@ -42,12 +46,11 @@ object AvatarEvent : Listener {
         val whoClicked = event.whoClicked
 
         if (whoClicked is Player) {
-            val player = whoClicked as Player
             val slot = event.rawSlot
 
             // 유효한 슬롯을 클릭했는지 확인
-            if (slot >= 0 && slot < player.inventory.size) {
-                player.sendMessage("클릭한 슬롯 번호: $slot")
+            if (slot >= 0 && slot < whoClicked.inventory.size) {
+                whoClicked.sendMessage("클릭한 슬롯 번호: $slot")
             }
         }
     }
@@ -70,6 +73,7 @@ object AvatarEvent : Listener {
         }
 
         player.inventory.clear()
+        //copyFrom(player)
         updateAvatarArmor()
         avatarLoaded = true
     }

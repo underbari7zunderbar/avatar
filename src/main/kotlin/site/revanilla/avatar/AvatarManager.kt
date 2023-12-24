@@ -15,7 +15,7 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
-import site.revanilla.avatar.events.AvatarEvent
+import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
 import java.util.*
 
 
@@ -136,6 +136,27 @@ object AvatarManager {
         inv.setItem(8, ItemStack(Material.WOODEN_SWORD))
     }
 
+    fun copyHotBar(player: Player) {
+        val i = player.inventory
+        i.setItem(0, avatarInventory.getItem(18))
+        i.setItem(1, avatarInventory.getItem(19))
+        i.setItem(2, avatarInventory.getItem(20))
+        i.setItem(3, avatarInventory.getItem(21))
+        i.setItem(4, avatarInventory.getItem(22))
+        i.setItem(5, avatarInventory.getItem(23))
+        i.setItem(6, avatarInventory.getItem(24))
+        i.setItem(7, avatarInventory.getItem(25))
+        i.setItem(8, avatarInventory.getItem(26))
+    }
+
+    fun copyArmor(player: Player){
+        val plinv = player.inventory
+        plinv.helmet = avatarInventory.getItem(3)
+        plinv.chestplate = avatarInventory.getItem(4)
+        plinv.leggings = avatarInventory.getItem(5)
+        plinv.boots = avatarInventory.getItem(6)
+        plinv.setItemInOffHand(avatarInventory.getItem(8))
+    }
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
         for (i in 53 downTo 27) {
@@ -144,22 +165,7 @@ object AvatarManager {
                 playerInventory.setItem(i - 18, avatarItem)
             }
         }
-        playerInventory.helmet = avatarInventory.getItem(3)
-        playerInventory.chestplate = avatarInventory.getItem(4)
-        playerInventory.leggings = avatarInventory.getItem(5)
-        playerInventory.boots = avatarInventory.getItem(6)
-        playerInventory.setItemInOffHand(avatarInventory.getItem(8))
-        playerInventory.setItemInMainHand(avatarInventory.getItem(18))
-        playerInventory.setItem(0, avatarInventory.getItem(18))
-        playerInventory.setItem(1, avatarInventory.getItem(19))
-        playerInventory.setItem(2, avatarInventory.getItem(20))
-        playerInventory.setItem(3, avatarInventory.getItem(21))
-        playerInventory.setItem(4, avatarInventory.getItem(22))
-        playerInventory.setItem(5, avatarInventory.getItem(23))
-        playerInventory.setItem(6, avatarInventory.getItem(24))
-        playerInventory.setItem(7, avatarInventory.getItem(25))
-        playerInventory.setItem(8, avatarInventory.getItem(26))
-        AvatarEvent.avatarLoaded = true
+        avatarLoaded = true
     }
 
 

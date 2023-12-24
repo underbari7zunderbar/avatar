@@ -1,10 +1,7 @@
 package site.revanilla.avatar
 
 import org.bukkit.configuration.serialization.ConfigurationSerialization.registerClass
-import org.bukkit.event.EventHandler
 import org.bukkit.event.HandlerList
-import org.bukkit.event.Listener
-import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
 import site.revanilla.avatar.AvatarManager.copyTo
@@ -16,7 +13,7 @@ import site.revanilla.avatar.events.AvatarEvent
 import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
 
 @Suppress("UNCHECKED_CAST")
-class AvatarPlugin : JavaPlugin(), Listener {
+class AvatarPlugin : JavaPlugin() {
   companion object {
     lateinit var instance: AvatarPlugin
       private set
@@ -41,11 +38,6 @@ class AvatarPlugin : JavaPlugin(), Listener {
 
     config.set("avatars", null)
     plugin.saveConfig()
-  }
-
-  @EventHandler
-  fun PlayerQuitEvent.onQuit() {
-    copyTo(player)
   }
 
   override fun onDisable() {
