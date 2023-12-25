@@ -1,6 +1,7 @@
 package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -25,19 +26,20 @@ import site.revanilla.avatar.AvatarManager.updateAvatarArmor
 object AvatarEvent : Listener {
 
     var avatarLoaded = false
-    var changed: Boolean = false
+
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         copyTo(player)
         copyArmor(player)
         copyHotBar(player)
-        val viewers = avatarInventory.viewers
-        for (viewer in viewers) {
-            viewer.closeInventory()
+        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
+            if (onlinePlayer.openInventory.topInventory == avatarInventory) {
+                onlinePlayer.closeInventory()
+            }
         }
 
-        if (avatarLoaded) {
+            if (avatarLoaded) {
             despawnAvatar()
         }
         updateAvatarArmor()
@@ -46,7 +48,7 @@ object AvatarEvent : Listener {
         avatarLoaded = false
     }
 
-    @EventHandler
+    /*@EventHandler
     fun onInventoryClick(event: InventoryClickEvent) {
         val whoClicked = event.whoClicked
 
@@ -57,7 +59,7 @@ object AvatarEvent : Listener {
                 whoClicked.sendMessage("클릭한 슬롯 번호: $slot")
             }
         }
-    }
+    }*/
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
@@ -82,8 +84,6 @@ object AvatarEvent : Listener {
 
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
-        changed = true
-
         updateAvatarArmor()
         val slot = event.rawSlot
 
