@@ -12,8 +12,6 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager
 import site.revanilla.avatar.AvatarManager.avatarInventory
-import site.revanilla.avatar.AvatarManager.copyArmor
-import site.revanilla.avatar.AvatarManager.copyHotBar
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
@@ -31,15 +29,13 @@ object AvatarEvent : Listener {
     fun PlayerJoinEvent.onJoin() {
         fakeServer.addPlayer(player)
         copyTo(player)
-        copyArmor(player)
-        copyHotBar(player)
         for (onlinePlayer in Bukkit.getOnlinePlayers()) {
             if (onlinePlayer.openInventory.topInventory == avatarInventory) {
                 onlinePlayer.closeInventory()
             }
         }
 
-            if (avatarLoaded) {
+        if (avatarLoaded) {
             despawnAvatar()
         }
         updateAvatarArmor()
@@ -126,10 +122,10 @@ object AvatarEvent : Listener {
         }
     }
 
-        @EventHandler
-        fun PlayerUseUnknownEntityEvent.onUseUnknownEntity() {
-            fakePlayers.find { it.bukkitEntity.entityId == entityId }?.let {
-                openInventory(player, it)
-            }
+    @EventHandler
+    fun PlayerUseUnknownEntityEvent.onUseUnknownEntity() {
+        fakePlayers.find { it.bukkitEntity.entityId == entityId }?.let {
+            openInventory(player, it)
         }
     }
+}

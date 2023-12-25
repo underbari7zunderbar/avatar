@@ -29,6 +29,7 @@ object AvatarManager {
     val avatars = arrayListOf<AvatarData>()
     var taskId = 0
 
+    val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
     var npc: FakeEntity<Player>? = fakePlayers.firstOrNull()
 
     fun despawnAvatar() {
@@ -67,11 +68,11 @@ object AvatarManager {
 
             }
 
-                if (!isLoaded) avatars += AvatarData.from(npc!!, avatarData.uniqueId)
-            }
+            if (!isLoaded) avatars += AvatarData.from(npc!!, avatarData.uniqueId)
         }
+    }
 
-    val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
+
     private fun createAvatarInventory(player: Player): Inventory {
 
         val barrierItem = ItemStack(Material.BARRIER)
@@ -122,76 +123,43 @@ object AvatarManager {
 
         return avatarInventory
     }
-
-    fun copyToP(player: Player) {
-        val inv = player.inventory
-        inv.setItem(0, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(1, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(2, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(3, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(4, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(5, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(6, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(7, ItemStack(Material.WOODEN_SWORD))
-        inv.setItem(8, ItemStack(Material.WOODEN_SWORD))
-    }
-
-    fun copyHotBar(player: Player) {
-        val i = player.inventory
-        i.setItem(0, avatarInventory.getItem(18))
-        i.setItem(1, avatarInventory.getItem(19))
-        i.setItem(2, avatarInventory.getItem(20))
-        i.setItem(3, avatarInventory.getItem(21))
-        i.setItem(4, avatarInventory.getItem(22))
-        i.setItem(5, avatarInventory.getItem(23))
-        i.setItem(6, avatarInventory.getItem(24))
-        i.setItem(7, avatarInventory.getItem(25))
-        i.setItem(8, avatarInventory.getItem(26))
-        println("copyHotBar")
-    }
-
-    fun copyArmor(player: Player){
-        val plinv = player.inventory
-        val helmet = avatarInventory.getItem(3)
-        val chestplate = avatarInventory.getItem(4)
-        val leggings = avatarInventory.getItem(5)
-        val boots = avatarInventory.getItem(6)
-        val offhand = avatarInventory.getItem(8)
-        if (helmet != null) {
-            plinv.helmet = helmet
-        }
-        if (chestplate != null) {
-            plinv.chestplate = chestplate
-        }
-        if (leggings != null) {
-            plinv.leggings = leggings
-        }
-        if (boots != null) {
-            plinv.boots = boots
-        }
-        if (offhand != null) {
-            plinv.setItemInOffHand(offhand)
-        }
-        println("copyArmor")
-    }
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
-        for (i in 53 downTo 27) {
+
+        // 아이템 옮기기: 플레이어의 인벤토리로 아이템 이동
+        for (i in 0 until 9) {
+            playerInventory.setItem(i, avatarInventory.getItem(i + 18))
+        }
+
+        // 플레이어의 헬멧, 갑옷, 바지, 신발, 오프핸드 아이템 설정
+        val armorSlots = listOf(3, 4, 5, 6, 8)
+        for (slot in armorSlots) {
+            val avatarItem = avatarInventory.getItem(slot)
+            if (avatarItem != null) {
+                when (slot) {
+                    3 -> playerInventory.helmet = avatarItem
+                    4 -> playerInventory.chestplate = avatarItem
+                    5 -> playerInventory.leggings = avatarItem
+                    6 -> playerInventory.boots = avatarItem
+                    8 -> playerInventory.setItemInOffHand(avatarItem)
+                }
+            }
+        }
+
+        // 인벤토리 남은 슬롯에 아이템 옮기기
+        for (i in 27 until 54) {
             val avatarItem = avatarInventory.getItem(i)
             if (avatarItem != null) {
                 playerInventory.setItem(i - 18, avatarItem)
             }
         }
+
         avatarLoaded = true
-        println("copyTo")
     }
+    fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
+        AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)
+    )
 
-
-
-        fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
-            AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)
-        )
-
-        fun openInventory(player: Player, body: FakeEntity<Player>) =
-            player.openInventory(linkedInventory[body.bukkitEntity.uniqueId]!!)
-    }
+    fun openInventory(player: Player, body: FakeEntity<Player>) =
+        player.openInventory(linkedInventory[body.bukkitEntity.uniqueId]!!)
+}

@@ -4,8 +4,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization.registe
 import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
-import site.revanilla.avatar.AvatarManager.copyArmor
-import site.revanilla.avatar.AvatarManager.copyHotBar
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
@@ -44,8 +42,6 @@ class AvatarPlugin : JavaPlugin() {
 
   override fun onDisable() {
     server.onlinePlayers.forEach { copyTo(it) }
-    server.onlinePlayers.forEach { copyArmor(it) }
-    server.onlinePlayers.forEach { copyHotBar(it) }
     taskId = 0
     server.scheduler.cancelTask(taskId)
     fakeServer.clear()
