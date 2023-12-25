@@ -147,15 +147,32 @@ object AvatarManager {
         i.setItem(6, avatarInventory.getItem(24))
         i.setItem(7, avatarInventory.getItem(25))
         i.setItem(8, avatarInventory.getItem(26))
+        println("copyHotBar")
     }
 
     fun copyArmor(player: Player){
         val plinv = player.inventory
-        plinv.helmet = avatarInventory.getItem(3)
-        plinv.chestplate = avatarInventory.getItem(4)
-        plinv.leggings = avatarInventory.getItem(5)
-        plinv.boots = avatarInventory.getItem(6)
-        plinv.setItemInOffHand(avatarInventory.getItem(8))
+        val helmet = avatarInventory.getItem(3)
+        val chestplate = avatarInventory.getItem(4)
+        val leggings = avatarInventory.getItem(5)
+        val boots = avatarInventory.getItem(6)
+        val offhand = avatarInventory.getItem(8)
+        if (helmet != null) {
+            plinv.helmet = helmet
+        }
+        if (chestplate != null) {
+            plinv.chestplate = chestplate
+        }
+        if (leggings != null) {
+            plinv.leggings = leggings
+        }
+        if (boots != null) {
+            plinv.boots = boots
+        }
+        if (offhand != null) {
+            plinv.setItemInOffHand(offhand)
+        }
+        println("copyArmor")
     }
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
@@ -166,20 +183,9 @@ object AvatarManager {
             }
         }
         avatarLoaded = true
+        println("copyTo")
     }
 
-
-    fun copyFrom(player: Player) {
-        val inv = player.inventory
-
-        avatarInventory.setItem(3, inv.helmet)
-        avatarInventory.setItem(4, inv.chestplate)
-        avatarInventory.setItem(5, inv.leggings)
-        avatarInventory.setItem(6, inv.boots)
-        avatarInventory.setItem(18, inv.getItem(36))
-        avatarInventory.setItem(8, inv.itemInOffHand)
-        avatarInventory.storageContents = inv.storageContents
-    }
 
 
         fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(

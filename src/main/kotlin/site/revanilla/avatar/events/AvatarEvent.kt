@@ -32,6 +32,11 @@ object AvatarEvent : Listener {
         copyTo(player)
         copyArmor(player)
         copyHotBar(player)
+        val viewers = avatarInventory.viewers
+        for (viewer in viewers) {
+            viewer.closeInventory()
+        }
+
         if (avatarLoaded) {
             despawnAvatar()
         }
@@ -48,7 +53,6 @@ object AvatarEvent : Listener {
         if (whoClicked is Player) {
             val slot = event.rawSlot
 
-            // 유효한 슬롯을 클릭했는지 확인
             if (slot >= 0 && slot < whoClicked.inventory.size) {
                 whoClicked.sendMessage("클릭한 슬롯 번호: $slot")
             }
@@ -72,8 +76,6 @@ object AvatarEvent : Listener {
             setItemInOffHand(player.inventory.itemInOffHand)
         }
 
-        player.inventory.clear()
-        //copyFrom(player)
         updateAvatarArmor()
         avatarLoaded = true
     }
