@@ -115,7 +115,7 @@ object AvatarManager {
         }
 
         val storageContents = player.inventory.storageContents
-        for (i in 18 ..53) {
+        for (i in 18..53) {
             if (i - 18 < storageContents.size && storageContents[i - 18] != null) {
                 avatarInventory.setItem(i, storageContents[i - 18])
             }
@@ -126,12 +126,10 @@ object AvatarManager {
     fun copyTo(player: Player) {
         val playerInventory = player.inventory
 
-        // 아이템 옮기기: 플레이어의 인벤토리로 아이템 이동
         for (i in 0 until 9) {
             playerInventory.setItem(i, avatarInventory.getItem(i + 18))
         }
 
-        // 플레이어의 헬멧, 갑옷, 바지, 신발, 오프핸드 아이템 설정
         val armorSlots = listOf(3, 4, 5, 6, 8)
         for (slot in armorSlots) {
             val avatarItem = avatarInventory.getItem(slot)
@@ -146,7 +144,6 @@ object AvatarManager {
             }
         }
 
-        // 인벤토리 남은 슬롯에 아이템 옮기기
         for (i in 27 until 54) {
             val avatarItem = avatarInventory.getItem(i)
             if (avatarItem != null) {

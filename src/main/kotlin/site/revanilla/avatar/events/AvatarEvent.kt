@@ -44,19 +44,6 @@ object AvatarEvent : Listener {
         avatarLoaded = false
     }
 
-    /*@EventHandler
-    fun onInventoryClick(event: InventoryClickEvent) {
-        val whoClicked = event.whoClicked
-
-        if (whoClicked is Player) {
-            val slot = event.rawSlot
-
-            if (slot >= 0 && slot < whoClicked.inventory.size) {
-                whoClicked.sendMessage("클릭한 슬롯 번호: $slot")
-            }
-        }
-    }*/
-
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         fakeServer.removePlayer(player)
