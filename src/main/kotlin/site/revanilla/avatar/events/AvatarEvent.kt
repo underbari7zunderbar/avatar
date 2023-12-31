@@ -1,7 +1,8 @@
 package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
-import org.bukkit.Bukkit
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -10,15 +11,14 @@ import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
-import site.revanilla.avatar.AvatarManager
-import site.revanilla.avatar.AvatarManager.avatarInventory
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
+import site.revanilla.avatar.AvatarManager.linkedInventories
+import site.revanilla.avatar.AvatarManager.npc
 import site.revanilla.avatar.AvatarManager.openInventory
-import site.revanilla.avatar.AvatarManager.updateAvatarArmor
 
 
 object AvatarEvent : Listener {
@@ -27,23 +27,18 @@ object AvatarEvent : Listener {
 
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
+        despawnAvatar()
         fakeServer.addPlayer(player)
         copyTo(player)
-        for (onlinePlayer in Bukkit.getOnlinePlayers()) {
-            if (onlinePlayer.openInventory.topInventory == avatarInventory) {
-                onlinePlayer.closeInventory()
-            }
-        }
 
         if (avatarLoaded) {
             despawnAvatar()
         }
-        updateAvatarArmor()
-        player.updateInventory()
-        despawnAvatar()
+        val avatarInventory = linkedInventories[player.uniqueId] ?: return
+        avatarInventory.close()
+        linkedInventories.remove(player.uniqueId)
         avatarLoaded = false
     }
-
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         fakeServer.removePlayer(player)
@@ -52,7 +47,7 @@ object AvatarEvent : Listener {
             yaw = 0f
         })
 
-        AvatarManager.npc!!.updateEquipment {
+        npc!!.updateEquipment {
             helmet = player.inventory.helmet
             chestplate = player.inventory.chestplate
             leggings = player.inventory.leggings
@@ -61,39 +56,32 @@ object AvatarEvent : Listener {
             setItemInOffHand(player.inventory.itemInOffHand)
         }
 
-        updateAvatarArmor()
         avatarLoaded = true
     }
 
     @EventHandler
     fun onClick(event: InventoryClickEvent) {
-        updateAvatarArmor()
         val slot = event.rawSlot
 
-        if (slot == 0) {
+        if (slot == 0 && event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE)) {
             event.isCancelled = true
             return
         }
 
-        for (i in 3 until 9) {
-            updateAvatarArmor()
-        }
-        val clickedInventory = event.clickedInventory
         val player = event.whoClicked as? Player
 
-        if (clickedInventory == avatarInventory && player != null && !player.hasPermission("avt.avt")) {
+        if (event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE) && player != null && !player.hasPermission("avt.avt")) {
             event.isCancelled = true
         }
 
         if (slot < 54) {
             val item = event.currentItem
 
-            if (item?.type == Material.BARRIER) {
+            if (item?.type == Material.BARRIER && event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE)) {
                 event.isCancelled = true
                 return
             }
         }
-        updateAvatarArmor()
     }
 
     @EventHandler(ignoreCancelled = true)

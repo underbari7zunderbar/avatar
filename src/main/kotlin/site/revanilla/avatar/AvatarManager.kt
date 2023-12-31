@@ -30,25 +30,13 @@ object AvatarManager {
     var taskId = 0
 
     val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
+    val linkedInventories = HashMap<UUID, Inventory>()
     var npc: FakeEntity<Player>? = fakePlayers.firstOrNull()
 
     fun despawnAvatar() {
         npc?.run {
             remove()
             npc = null
-        }
-    }
-
-    fun updateAvatarArmor() {
-        npc?.apply {
-            updateEquipment {
-                setHelmet(avatarInventory.getItem(3)?.clone(), true)
-                setChestplate(avatarInventory.getItem(4)?.clone(), true)
-                setLeggings(avatarInventory.getItem(5)?.clone(), true)
-                setBoots(avatarInventory.getItem(6)?.clone(), true)
-                setItemInMainHand(avatarInventory.getItem(18)?.clone(), true)
-                setItemInOffHand(avatarInventory.getItem(8)?.clone(), true)
-            }
         }
     }
 
@@ -74,6 +62,7 @@ object AvatarManager {
 
 
     private fun createAvatarInventory(player: Player): Inventory {
+        val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
 
         val barrierItem = ItemStack(Material.BARRIER)
         val barrierMeta = barrierItem.itemMeta
@@ -121,9 +110,11 @@ object AvatarManager {
             }
         }
 
+        linkedInventories[player.uniqueId] = avatarInventory
         return avatarInventory
     }
     fun copyTo(player: Player) {
+        val avatarInventory = linkedInventories[player.uniqueId] ?: return
         val playerInventory = player.inventory
 
         for (i in 0 until 9) {
@@ -150,13 +141,18 @@ object AvatarManager {
                 playerInventory.setItem(i - 18, avatarItem)
             }
         }
-
         avatarLoaded = true
     }
-    fun createAvatar(player: Player, deathLocation: Location) = createAvatarFromData(
-        AvatarData(deathLocation, player.uniqueId, createAvatarInventory(player), player.name)
-    )
+    fun createAvatar(player: Player, deathLocation: Location) {
+        val avatarInventory = createAvatarInventory(player)
+        val avatarData = AvatarData(deathLocation, player.uniqueId, avatarInventory, player.name)
 
+        avatars += avatarData
+
+        linkedInventories[player.uniqueId] = avatarInventory
+
+        createAvatarFromData(avatarData)
+    }
     fun openInventory(player: Player, body: FakeEntity<Player>) =
         player.openInventory(linkedInventory[body.bukkitEntity.uniqueId]!!)
 }
