@@ -25,7 +25,6 @@ class AvatarPlugin : JavaPlugin() {
     registerClass(AvatarData::class.java)
     avatars.addAll(config.getList("avatars", listOf<AvatarData>()) as List<AvatarData>)
 
-
     server.scheduler.runTaskTimer(plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
     server.onlinePlayers.forEach { fakeServer.addPlayer(it) }
@@ -36,8 +35,8 @@ class AvatarPlugin : JavaPlugin() {
       avatarLoaded = true
     }
 
-    config.set("avatars", null)
-    plugin.saveConfig()
+    //config.set("avatars", null)
+    //plugin.saveConfig()
   }
 
   override fun onDisable() {
@@ -50,6 +49,6 @@ class AvatarPlugin : JavaPlugin() {
     HandlerList.unregisterAll(AvatarEvent)
 
     //config.set("avatars", avatars.toList())
-    plugin.saveConfig()
+    //plugin.saveConfig()
   }
 }

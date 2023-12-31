@@ -28,8 +28,6 @@ object AvatarManager {
     val linkedInventory = HashMap<UUID, Inventory>()
     val avatars = arrayListOf<AvatarData>()
     var taskId = 0
-
-    val avatarInventory = server.createInventory(null, 54, text("ѐЀ", NamedTextColor.WHITE))
     val linkedInventories = HashMap<UUID, Inventory>()
     var npc: FakeEntity<Player>? = fakePlayers.firstOrNull()
 
