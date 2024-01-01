@@ -29,7 +29,7 @@ object AvatarManager {
     val avatars = arrayListOf<AvatarData>()
     var taskId = 0
     val linkedInventories = HashMap<UUID, Inventory>()
-    var npc: FakeEntity<Player>? = fakePlayers.firstOrNull()
+    var npc: FakeEntity<Player>? = null
 
     fun despawnAvatar() {
         npc?.run {
