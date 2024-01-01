@@ -2,7 +2,7 @@ package site.revanilla.avatar.events
 
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -52,21 +52,22 @@ object AvatarEvent : Listener {
     fun onClick(event: InventoryClickEvent) {
         val slot = event.rawSlot
 
-        if (slot == 0 && event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE)) {
+        if (slot == 0 && event.view.title() == Component.text("ѐЀ").color(TextColor.color(198,198,198))) {
             event.isCancelled = true
             return
         }
 
         val player = event.whoClicked as? Player
 
-        if (event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE) && player != null && !player.hasPermission("avt.avt")) {
+        if (event.view.title() == Component.text("ѐЀ").color(TextColor.color(198,198,198)) && player != null && !player.hasPermission("avt.avt")) {
             event.isCancelled = true
         }
 
         if (slot < 54) {
             val item = event.currentItem
 
-            if (item?.type == Material.BARRIER && event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE)) {
+            if (item?.type == Material.LIGHT_GRAY_STAINED_GLASS_PANE && event.view.title() == Component.text("ѐЀ").color(
+                    TextColor.color(198,198,198))) {
                 event.isCancelled = true
                 return
             }
