@@ -3,6 +3,7 @@ package site.revanilla.avatar.events
 import com.destroystokyo.paper.event.player.PlayerUseUnknownEntityEvent
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.format.TextColor
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
@@ -32,19 +33,21 @@ object AvatarEvent : Listener {
 
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
-        fakeServer.removePlayer(player)
-        createAvatar(player, player.location.clone().apply {
-            pitch = 0f
-            yaw = 0f
-        })
+        if (player.gameMode != GameMode.SPECTATOR) {
+            fakeServer.removePlayer(player)
+            createAvatar(player, player.location.clone().apply {
+                pitch = 0f
+                yaw = 0f
+            })
 
-        npc!!.updateEquipment {
-            helmet = player.inventory.helmet
-            chestplate = player.inventory.chestplate
-            leggings = player.inventory.leggings
-            boots = player.inventory.boots
-            setItemInMainHand(player.inventory.itemInMainHand)
-            setItemInOffHand(player.inventory.itemInOffHand)
+            npc!!.updateEquipment {
+                helmet = player.inventory.helmet
+                chestplate = player.inventory.chestplate
+                leggings = player.inventory.leggings
+                boots = player.inventory.boots
+                setItemInMainHand(player.inventory.itemInMainHand)
+                setItemInOffHand(player.inventory.itemInOffHand)
+            }
         }
     }
 
