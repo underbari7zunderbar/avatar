@@ -15,7 +15,6 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
-import site.revanilla.avatar.events.AvatarEvent.avatarLoaded
 import java.util.*
 
 
@@ -111,12 +110,16 @@ object AvatarManager {
         linkedInventories[player.uniqueId] = avatarInventory
         return avatarInventory
     }
+
     fun copyTo(player: Player) {
         val avatarInventory = linkedInventories[player.uniqueId] ?: return
         val playerInventory = player.inventory
 
         for (i in 0 until 9) {
-            playerInventory.setItem(i, avatarInventory.getItem(i + 18))
+            val avatarItem = avatarInventory.getItem(i + 18)
+            if (avatarItem != null) {
+                playerInventory.setItem(i, avatarItem)
+            }
         }
 
         val armorSlots = listOf(3, 4, 5, 6, 8)
@@ -139,8 +142,34 @@ object AvatarManager {
                 playerInventory.setItem(i - 18, avatarItem)
             }
         }
-        avatarLoaded = true
+        for (i in 0 until 9) {
+            val avatarItem = avatarInventory.getItem(i + 18)
+            if (avatarItem == null) {
+                playerInventory.setItem(i, null)
+            }
+        }
+
+        for (slot in armorSlots) {
+            val avatarItem = avatarInventory.getItem(slot)
+            if (avatarItem == null) {
+                when (slot) {
+                    3 -> playerInventory.helmet = null
+                    4 -> playerInventory.chestplate = null
+                    5 -> playerInventory.leggings = null
+                    6 -> playerInventory.boots = null
+                    8 -> playerInventory.setItemInOffHand(null)
+                }
+            }
+        }
+
+        for (i in 27 until 54) {
+            val avatarItem = avatarInventory.getItem(i)
+            if (avatarItem == null) {
+                playerInventory.setItem(i - 18, null)
+            }
+        }
     }
+
     fun createAvatar(player: Player, deathLocation: Location) {
         val avatarInventory = createAvatarInventory(player)
         val avatarData = AvatarData(deathLocation, player.uniqueId, avatarInventory, player.name)

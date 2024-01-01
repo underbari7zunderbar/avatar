@@ -23,21 +23,13 @@ import site.revanilla.avatar.AvatarManager.openInventory
 
 object AvatarEvent : Listener {
 
-    var avatarLoaded = false
-
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         despawnAvatar()
         fakeServer.addPlayer(player)
         copyTo(player)
-
-        if (avatarLoaded) {
-            despawnAvatar()
-        }
         val avatarInventory = linkedInventories[player.uniqueId] ?: return
         avatarInventory.close()
-        linkedInventories.remove(player.uniqueId)
-        avatarLoaded = false
     }
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
@@ -55,8 +47,6 @@ object AvatarEvent : Listener {
             setItemInMainHand(player.inventory.itemInMainHand)
             setItemInOffHand(player.inventory.itemInOffHand)
         }
-
-        avatarLoaded = true
     }
 
     @EventHandler
