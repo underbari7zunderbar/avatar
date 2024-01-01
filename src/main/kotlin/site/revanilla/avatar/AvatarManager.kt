@@ -180,6 +180,7 @@ object AvatarManager {
 
         createAvatarFromData(avatarData)
     }
+
     fun openInventory(player: Player, body: FakeEntity<Player>) =
         player.openInventory(linkedInventory[body.bukkitEntity.uniqueId]!!)
 }

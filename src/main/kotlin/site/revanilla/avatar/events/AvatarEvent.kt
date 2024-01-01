@@ -31,6 +31,7 @@ object AvatarEvent : Listener {
         val avatarInventory = linkedInventories[player.uniqueId] ?: return
         avatarInventory.close()
     }
+
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         fakeServer.removePlayer(player)

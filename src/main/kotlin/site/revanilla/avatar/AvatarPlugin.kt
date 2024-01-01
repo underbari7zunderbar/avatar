@@ -34,8 +34,6 @@ class AvatarPlugin : JavaPlugin() {
       val avatarInventory = linkedInventories[it.uniqueId] ?: return
       avatarInventory.close()
     }
-    //config.set("avatars", null)
-    //plugin.saveConfig()
   }
 
   override fun onDisable() {
@@ -46,8 +44,5 @@ class AvatarPlugin : JavaPlugin() {
     fakeServer.entities.forEach { it.remove() }
     server.onlinePlayers.forEach { fakeServer.removePlayer(it) }
     HandlerList.unregisterAll(AvatarEvent)
-
-    //config.set("avatars", avatars.toList())
-    //plugin.saveConfig()
   }
 }
