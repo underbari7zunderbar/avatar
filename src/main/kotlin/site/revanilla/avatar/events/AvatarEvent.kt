@@ -10,7 +10,6 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
-import org.bukkit.event.player.PlayerToggleSneakEvent
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatar
 import site.revanilla.avatar.AvatarManager.despawnAvatar
@@ -19,7 +18,6 @@ import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.linkedInventories
 import site.revanilla.avatar.AvatarManager.npc
 import site.revanilla.avatar.AvatarManager.openInventory
-
 
 object AvatarEvent : Listener {
 
@@ -71,19 +69,6 @@ object AvatarEvent : Listener {
             if (item?.type == Material.BARRIER && event.view.title() == Component.text("ѐЀ", NamedTextColor.WHITE)) {
                 event.isCancelled = true
                 return
-            }
-        }
-    }
-
-    @EventHandler(ignoreCancelled = true)
-    fun PlayerToggleSneakEvent.onToggleSneak() {
-        if (isSneaking) {
-            fakePlayers.find {
-                it.bukkitEntity.location.distance(player.location) <= 1.5 ||
-                        it.bukkitEntity.location.clone().subtract(1.0, 0.0, 0.0).distance(player.location) <= 1.5 ||
-                        it.bukkitEntity.location.clone().subtract(2.0, 0.0, 0.0).distance(player.location) <= 1.5
-            }?.let {
-                openInventory(player, it)
             }
         }
     }

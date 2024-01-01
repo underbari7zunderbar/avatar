@@ -5,13 +5,13 @@ import org.bukkit.event.HandlerList
 import org.bukkit.plugin.java.JavaPlugin
 import site.revanilla.avatar.AvatarManager.avatars
 import site.revanilla.avatar.AvatarManager.copyTo
+import site.revanilla.avatar.AvatarManager.createAvatarFromData
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.linkedInventories
 import site.revanilla.avatar.AvatarManager.plugin
 import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
 
-@Suppress("UNCHECKED_CAST")
 class AvatarPlugin : JavaPlugin() {
   companion object {
     lateinit var instance: AvatarPlugin
@@ -22,14 +22,13 @@ class AvatarPlugin : JavaPlugin() {
     instance = this
 
     registerClass(AvatarData::class.java)
-    avatars.addAll(config.getList("avatars", listOf<AvatarData>()) as List<AvatarData>)
 
     server.scheduler.runTaskTimer(plugin, Runnable { fakeServer.update() }, 0L, 0L).also { taskId = it.taskId }
 
     server.onlinePlayers.forEach { fakeServer.addPlayer(it) }
     server.pluginManager.registerEvents(AvatarEvent, plugin)
 
-    avatars.forEach { AvatarManager.createAvatarFromData(it, true) }
+    avatars.forEach { createAvatarFromData(it, true) }
     for (it in server.onlinePlayers) {
       val avatarInventory = linkedInventories[it.uniqueId] ?: return
       avatarInventory.close()
