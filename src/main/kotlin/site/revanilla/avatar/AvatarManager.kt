@@ -16,6 +16,7 @@ import org.bukkit.entity.Pose
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
+import site.revanilla.avatar.AvatarData.Companion.from
 import java.util.*
 
 
@@ -29,14 +30,13 @@ object AvatarManager {
     val avatars = arrayListOf<AvatarData>()
     var taskId = 0
     val linkedInventories = HashMap<UUID, Inventory>()
+    val npcs = HashMap<UUID, FakeEntity<Player>>()
     var npc: FakeEntity<Player>? = null
 
-    fun despawnAvatar() {
-        npc?.run {
-            remove()
-            npc = null
-        }
+    fun despawnAvatar(playerUUID: UUID) {
+        npcs.remove(playerUUID)?.remove() // 해당 플레이어의 npc 제거
     }
+
 
     fun createAvatarFromData(
         avatarData: AvatarData,
@@ -46,15 +46,30 @@ object AvatarManager {
         val profile = skinProfile ?: MojangAPI.fetchSkinProfileAsync(avatarData.uniqueId).get()
 
         profile?.let {
-            npc = fakeServer.spawnPlayer(avatarData.location, avatarData.name, profile.profileProperties().toSet())
+            val newNPC = fakeServer.spawnPlayer(
+                avatarData.location,
+                avatarData.name,
+                profile.profileProperties().toSet()
+            )
 
-            npc!!.updateMetadata {
+            newNPC.updateMetadata {
                 pose = Pose.SLEEPING
                 linkedInventory[uniqueId] = avatarData.inventory
-
             }
 
-            if (!isLoaded) avatars += AvatarData.from(npc!!, avatarData.uniqueId)
+            newNPC.updateEquipment {
+                val avatarInventory = linkedInventories[avatarData.uniqueId] ?: return@updateEquipment
+                helmet = avatarInventory.getItem(3)
+                chestplate = avatarInventory.getItem(4)
+                leggings = avatarInventory.getItem(5)
+                boots = avatarInventory.getItem(6)
+                setItemInMainHand(avatarInventory.getItem(18))
+                setItemInOffHand(avatarInventory.getItem(8))
+            }
+
+            if (!isLoaded) avatars += from(newNPC, avatarData.uniqueId)
+
+            npcs[avatarData.uniqueId] = newNPC // 해당 플레이어의 npc를 관리하는 맵에 추가
         }
     }
 
@@ -174,9 +189,7 @@ object AvatarManager {
         val avatarData = AvatarData(deathLocation, player.uniqueId, avatarInventory, player.name)
 
         avatars += avatarData
-
         linkedInventories[player.uniqueId] = avatarInventory
-
         createAvatarFromData(avatarData)
     }
 

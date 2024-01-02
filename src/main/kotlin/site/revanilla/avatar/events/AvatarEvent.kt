@@ -17,37 +17,38 @@ import site.revanilla.avatar.AvatarManager.despawnAvatar
 import site.revanilla.avatar.AvatarManager.fakePlayers
 import site.revanilla.avatar.AvatarManager.fakeServer
 import site.revanilla.avatar.AvatarManager.linkedInventories
-import site.revanilla.avatar.AvatarManager.npc
 import site.revanilla.avatar.AvatarManager.openInventory
 
 object AvatarEvent : Listener {
 
+    var isRide = false
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
-        despawnAvatar()
+        despawnAvatar(player.uniqueId)
         fakeServer.addPlayer(player)
         copyTo(player)
         val avatarInventory = linkedInventories[player.uniqueId] ?: return
         avatarInventory.close()
+        println(isRide)
+        if (isRide) {
+            val py = player.location.y
+            player.location.y = py + 1
+        }
     }
-
+//TODO: 보트탄상태에서 나가면 아래생성됨, 낄수있음
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
+        despawnAvatar(player.uniqueId)
         if (player.gameMode != GameMode.SPECTATOR) {
             fakeServer.removePlayer(player)
             createAvatar(player, player.location.clone().apply {
                 pitch = 0f
                 yaw = 0f
+                if (player.isInsideVehicle) {
+                    y += 1
+                    //isRide = true
+                }
             })
-
-            npc!!.updateEquipment {
-                helmet = player.inventory.helmet
-                chestplate = player.inventory.chestplate
-                leggings = player.inventory.leggings
-                boots = player.inventory.boots
-                setItemInMainHand(player.inventory.itemInMainHand)
-                setItemInOffHand(player.inventory.itemInOffHand)
-            }
         }
     }
 
