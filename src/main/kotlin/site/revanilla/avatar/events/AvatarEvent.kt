@@ -33,11 +33,8 @@ object AvatarEvent : Listener {
         if (isRide) {
             val py = player.location.y
             player.location.y = py + 1
-            //val location = Location(player.world, player.location.x, player.location.y + 1, player.location.z)
-            //player.teleport(location)
         }
     }
-//TODO: 보트탄상태에서 나가면 아래생성됨, 낄수있음
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         despawnAvatar(player.uniqueId)
