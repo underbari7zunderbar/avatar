@@ -33,20 +33,22 @@ object AvatarEvent : Listener {
         if (isRide) {
             val py = player.location.y
             player.location.y = py + 1
+            //val location = Location(player.world, player.location.x, player.location.y + 1, player.location.z)
+            //player.teleport(location)
         }
     }
 //TODO: 보트탄상태에서 나가면 아래생성됨, 낄수있음
     @EventHandler
     fun PlayerQuitEvent.onQuit() {
         despawnAvatar(player.uniqueId)
-        if (player.gameMode != GameMode.SPECTATOR) {
+        if (player.gameMode != GameMode.SPECTATOR && !player.hasPermission("avt.avt")) {
             fakeServer.removePlayer(player)
             createAvatar(player, player.location.clone().apply {
                 pitch = 0f
                 yaw = 0f
                 if (player.isInsideVehicle) {
                     y += 1
-                    //isRide = true
+                    isRide = true
                 }
             })
         }
