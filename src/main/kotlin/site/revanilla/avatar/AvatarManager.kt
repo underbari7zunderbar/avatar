@@ -31,10 +31,9 @@ object AvatarManager {
     var taskId = 0
     val linkedInventories = HashMap<UUID, Inventory>()
     val npcs = HashMap<UUID, FakeEntity<Player>>()
-    var npc: FakeEntity<Player>? = null
 
     fun despawnAvatar(playerUUID: UUID) {
-        npcs.remove(playerUUID)?.remove() // 해당 플레이어의 npc 제거
+        npcs.remove(playerUUID)?.remove()
     }
 
 
@@ -69,7 +68,7 @@ object AvatarManager {
 
             if (!isLoaded) avatars += from(newNPC, avatarData.uniqueId)
 
-            npcs[avatarData.uniqueId] = newNPC // 해당 플레이어의 npc를 관리하는 맵에 추가
+            npcs[avatarData.uniqueId] = newNPC
         }
     }
 

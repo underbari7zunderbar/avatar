@@ -7,7 +7,6 @@ import site.revanilla.avatar.AvatarManager.avatars
 import site.revanilla.avatar.AvatarManager.copyTo
 import site.revanilla.avatar.AvatarManager.createAvatarFromData
 import site.revanilla.avatar.AvatarManager.fakeServer
-import site.revanilla.avatar.AvatarManager.linkedInventories
 import site.revanilla.avatar.AvatarManager.plugin
 import site.revanilla.avatar.AvatarManager.taskId
 import site.revanilla.avatar.events.AvatarEvent
@@ -29,10 +28,6 @@ class AvatarPlugin : JavaPlugin() {
     server.pluginManager.registerEvents(AvatarEvent, plugin)
 
     avatars.forEach { createAvatarFromData(it, true) }
-    for (it in server.onlinePlayers) {
-      val avatarInventory = linkedInventories[it.uniqueId] ?: return
-      avatarInventory.close()
-    }
     //config.set("avatars", null)
     //plugin.saveConfig()
   }
@@ -45,6 +40,10 @@ class AvatarPlugin : JavaPlugin() {
     fakeServer.entities.forEach { it.remove() }
     server.onlinePlayers.forEach { fakeServer.removePlayer(it) }
     HandlerList.unregisterAll(AvatarEvent)
+    for (it in server.onlinePlayers) {
+      val avatarInventory = AvatarManager.linkedInventories[it.uniqueId] ?: return
+      avatarInventory.close()
+    }
 
     //config.set("avatars", avatars.toList())
     //plugin.saveConfig()
