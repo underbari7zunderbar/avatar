@@ -1,14 +1,10 @@
-name: $name
+name: Avatar
 version: $version
 main: site.revanilla.avatar.AvatarPlugin
 description: $description
 authors:
   - _I7Z_
 api-version: "$apiVersion"
-commands:
-  avt:
-    description: summon offlineplayer avatar
-    usage: /avt <offline_player_name>
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib:1.8.22
   - org.jetbrains.kotlin:kotlin-reflect:1.8.22

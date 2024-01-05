@@ -21,7 +21,7 @@ import site.revanilla.avatar.AvatarManager.openInventory
 
 object AvatarEvent : Listener {
 
-    var isRide = false
+    private var isRide = false
     @EventHandler
     fun PlayerJoinEvent.onJoin() {
         despawnAvatar(player.uniqueId)
