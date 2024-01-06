@@ -29,7 +29,6 @@ object AvatarEvent : Listener {
         copyTo(player)
         val avatarInventory = linkedInventories[player.uniqueId] ?: return
         avatarInventory.close()
-        println(isRide)
         if (isRide) {
             val py = player.location.y
             player.location.y = py + 1
